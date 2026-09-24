@@ -1,0 +1,16 @@
+---
+import { Image } from 'astro:assets';
+import pegase from '../assets/logo/pegase.png';
+import texte from '../assets/logo/texte.png';
+
+interface Props { size?: number }
+const { size = 46 } = Astro.props;
+---
+<span class="logo">
+  <Image src={pegase} alt="" width={size * 2} height={Math.round(size * 2 * 801 / 900)} style={`height:${size}px;width:auto`} loading="eager" />
+  <Image src={texte} alt="Ascendia Racing" width={size * 5} style={`height:${Math.round(size * .52)}px;width:auto`} loading="eager" />
+</span>
+
+<style>
+  .logo { display: inline-flex; align-items: center; gap: 10px; }
+</style>

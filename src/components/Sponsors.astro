@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import { sponsors } from '../data/sponsors';
+---
+<section class="sponsors" aria-labelledby="t-sponsors">
+  <div class="wrap">
+    <p class="kicker" id="t-sponsors">Nos sponsors</p>
+    <ul>
+      {sponsors.map((s, i) => (
+        <li class="reveal" style={`--d:${i * 0.08}s`}>
+          <a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={s.nom}>
+            <Image src={s.logo} alt={s.nom} height={s.hauteur * 2} style={`height:${s.hauteur}px;width:auto`} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .sponsors {
+    border-block: 1px solid var(--line);
+    padding-block: 48px;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+  }
+  ul {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  li { background: color-mix(in srgb, var(--bg) 85%, transparent); }
+  a {
+    display: grid;
+    place-items: center;
+    height: 130px;
+    padding: 20px;
+    opacity: .7;
+    transition: opacity .3s, background .3s;
+  }
+  a:hover { opacity: 1; background: var(--bg-3); }
+  a :global(img) { max-width: 100%; object-fit: contain; }
+  @media (max-width: 760px) {
+    ul { grid-template-columns: 1fr 1fr; }
+    a { height: 100px; }
+  }
+</style>

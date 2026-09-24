@@ -1,0 +1,375 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { evenements, libelleType, plage, moisLong } from '../data/courses';
+import affichePLM from '../assets/affiche-petit-le-mans.webp';
+import fondMustang from '../assets/mustang-gt3-fond.webp';
+import fondLumieres from '../assets/fond-lumieres.webp';
+import fondTrio from '../assets/trio-gt3-963-nascar.webp';
+import fondDuo from '../assets/duo-cadillac-valkyrie.webp';
+
+// Photos du fond du tableau, de haut en bas
+const fondsTableau = [fondMustang, fondLumieres, fondTrio, fondDuo];
+
+// Affiches des courses où Ascendia est engagée (clé = nom de l'événement)
+const affiches: Record<string, ImageMetadata> = {
+  'Petit Le Mans': affichePLM,
+};
+
+const engagees = evenements.filter((e) => e.ascendia);
+
+// Regroupement par mois
+const parMois = evenements.reduce<Record<string, typeof evenements>>((acc, e) => {
+  const m = e.debut.slice(0, 7);
+  (acc[m] ||= []).push(e);
+  return acc;
+}, {});
+
+const nbTeam = evenements.filter((e) => e.type === 'team').length;
+const twitch = 'https://www.twitch.tv/ascendiatv';
+---
+<Base title="Calendrier" description="Calendrier 2026 des iRacing Special Events et courses d'endurance de l'Ascendia Racing Team : Daytona 24, Spa 24, Petit Le Mans…">
+  <PageHero
+    index="02"
+    kicker="iRacing Special Events"
+    titre="Calendrier "
+    accent="2026"
+    intro={`${evenements.length} Special Events en NASCAR, IndyCar, GTP, LMP2, LMP3, GT3 et GT4, dont ${nbTeam} courses d'endurance en équipe. Voici où et quand retrouver Ascendia en piste.`}
+  />
+
+  <!-- ================= COURSES ASCENDIA ================= -->
+  {engagees.map((e) => (
+    <section class="wrap feature" data-debut={e.debut} data-fin={e.fin} aria-labelledby={`t-${e.debut}`}>
+      {affiches[e.nom] && (
+        <div class="poster reveal">
+          <Image
+            src={affiches[e.nom]}
+            alt={`Affiche Ascendia Racing — ${e.nom}, ${plage(e.debut, e.fin)} 2026`}
+            widths={[480, 800, 1080]}
+            sizes="(max-width: 860px) 100vw, 480px"
+          />
+        </div>
+      )}
+      <div class="feature-body reveal" style="--d:.1s">
+        <p class="statut mono" data-statut><i></i><span>Ascendia engagée</span></p>
+        <h2 id={`t-${e.debut}`}>{e.nom}</h2>
+        <p class="feature-date">{plage(e.debut, e.fin)} 2026</p>
+        <dl class="spec">
+          <div><dt>Circuit</dt><dd>{e.circuit}</dd></div>
+          <div><dt>Catégories</dt><dd>{e.classes}</dd></div>
+          <div><dt>Format</dt><dd>{libelleType[e.type]}</dd></div>
+          <div><dt>Départ dans</dt><dd class="acc" data-compte>—</dd></div>
+        </dl>
+        <a href={twitch} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          Suivre la course en direct
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
+        </a>
+      </div>
+    </section>
+  ))}
+
+  <!-- ================= SAISON COMPLÈTE ================= -->
+  <section class="saison" aria-labelledby="t-saison">
+   <div class="wrap section">
+    <div class="section-head">
+      <div>
+        <p class="kicker">Saison complète</p>
+        <h2 id="t-saison">Tous les <em>événements</em></h2>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="filters" role="group" aria-label="Filtrer par type d'événement">
+        <button class="mono" data-filtre="tous" aria-pressed="true">Tous</button>
+        <button class="mono" data-filtre="team" aria-pressed="false">Team Events</button>
+        <button class="mono" data-filtre="nascar" aria-pressed="false">NASCAR</button>
+        <button class="mono" data-filtre="indycar" aria-pressed="false">IndyCar</button>
+      </div>
+      <label class="mono toggle">
+        <input type="checkbox" data-passes />
+        <span>Afficher les courses terminées</span>
+      </label>
+    </div>
+
+    <div class="tableau">
+    <!-- Fond du tableau : la 1re photo seule quand la liste est courte ;
+         quand la liste s'allonge, les photos suivantes apparaissent en dessous. -->
+    <div class="tableau-bg" aria-hidden="true">
+      {fondsTableau.map((img, i) => (
+        <Image src={img} alt="" widths={[768, 1280, 1920]} sizes="(max-width: 1240px) 100vw, 1180px" loading={i === 0 ? 'eager' : 'lazy'} />
+      ))}
+    </div>
+    {Object.entries(parMois).map(([m, liste]) => (
+      <div class="mois" data-mois>
+        <h3 class="mois-titre">{moisLong(m + '-01')}</h3>
+        <ol class="liste">
+          {liste.map((e) => (
+            <li
+              class:list={['ev', { ascendia: e.ascendia, team: e.type === 'team' }]}
+              data-type={e.type}
+              data-nascar={/nascar/i.test(e.classes) ? '' : undefined}
+              data-indycar={/indycar/i.test(e.classes) ? '' : undefined}
+              data-debut={e.debut}
+              data-fin={e.fin}
+            >
+              <span class="ev-date">{plage(e.debut, e.fin)}</span>
+              <div class="ev-info">
+                <p class="ev-nom">{e.nom}</p>
+                <p class="mono ev-circuit">{e.circuit}</p>
+              </div>
+              <span class="mono ev-classes">{e.classes}</span>
+              <span class:list={['mono', 'tag', e.type]}>
+                {e.ascendia ? 'Ascendia engagée' : libelleType[e.type]}
+              </span>
+              <span class="mono ev-statut" data-statut-ligne></span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ))}
+    <p class="mono vide" hidden>Aucun événement à venir pour ce filtre.</p>
+    </div>
+    <p class="mono source">Source : iracing.com/special-events</p>
+   </div>
+  </section>
+</Base>
+
+<script>
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const jour = (iso: string) => new Date(iso + 'T00:00:00');
+
+  // Statut des courses mises en avant
+  document.querySelectorAll<HTMLElement>('.feature').forEach((f) => {
+    const debut = jour(f.dataset.debut!), fin = jour(f.dataset.fin!);
+    const statut = f.querySelector<HTMLElement>('[data-statut] span')!;
+    const compte = f.querySelector<HTMLElement>('[data-compte]')!;
+    const j = Math.round((debut.getTime() - today.getTime()) / 864e5);
+    if (today > fin) { statut.textContent = 'Course terminée'; compte.textContent = 'Terminée'; f.classList.add('passe'); }
+    else if (today >= debut) { statut.textContent = 'En piste en ce moment'; compte.textContent = 'En cours'; f.classList.add('live'); }
+    else { statut.textContent = j <= 7 ? 'Ascendia engagée · ce week-end' : 'Ascendia engagée'; compte.textContent = j === 1 ? 'Demain' : `J-${j}`; }
+  });
+
+  // Statut de chaque ligne
+  const lignes = [...document.querySelectorAll<HTMLElement>('.ev')];
+  let prochainTrouve = false;
+  lignes.forEach((li) => {
+    const debut = jour(li.dataset.debut!), fin = jour(li.dataset.fin!);
+    const s = li.querySelector<HTMLElement>('[data-statut-ligne]')!;
+    if (today > fin) { li.classList.add('passe'); s.textContent = 'Terminé'; }
+    else if (today >= debut) { li.classList.add('en-cours'); s.textContent = 'En cours'; }
+    else {
+      const j = Math.round((debut.getTime() - today.getTime()) / 864e5);
+      s.textContent = `J-${j}`;
+      if (!prochainTrouve) { li.classList.add('prochain'); prochainTrouve = true; }
+    }
+  });
+
+  // Filtres
+  const boutons = document.querySelectorAll<HTMLButtonElement>('[data-filtre]');
+  const passes = document.querySelector<HTMLInputElement>('[data-passes]')!;
+  const vide = document.querySelector<HTMLElement>('.vide')!;
+  let filtre = 'tous';
+  const appliquer = () => {
+    let visibles = 0;
+    lignes.forEach((li) => {
+      const okType =
+        filtre === 'tous' ||
+        (filtre === 'team' && li.dataset.type === 'team') ||
+        (filtre === 'nascar' && li.hasAttribute('data-nascar')) ||
+        (filtre === 'indycar' && li.hasAttribute('data-indycar'));
+      const okDate = passes.checked || !li.classList.contains('passe');
+      li.hidden = !(okType && okDate);
+      if (!li.hidden) visibles++;
+    });
+    document.querySelectorAll<HTMLElement>('[data-mois]').forEach((m) => {
+      m.hidden = !m.querySelector('.ev:not([hidden])');
+    });
+    vide.hidden = visibles > 0;
+  };
+  boutons.forEach((b) => b.addEventListener('click', () => {
+    filtre = b.dataset.filtre!;
+    boutons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    appliquer();
+  }));
+  passes.addEventListener('change', appliquer);
+  appliquer();
+</script>
+
+<style>
+  /* ---------- COURSE ASCENDIA EN VEDETTE ---------- */
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 440px) 1fr;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+    padding-block: clamp(56px, 8vw, 96px) 0;
+  }
+  .poster :global(img) {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, .5);
+  }
+  .statut {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 6px 12px;
+    color: var(--accent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+  .statut i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: blink 1.4s infinite; }
+  .passe .statut { color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); }
+  .passe .statut i { background: var(--muted); animation: none; }
+  @keyframes blink { 50% { opacity: .2; } }
+  .feature h2 { font-size: clamp(3rem, 8vw, 6.4rem); margin: 18px 0 6px; }
+  .feature-date {
+    margin: 0 0 28px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .spec {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    margin: 0 0 32px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .spec div { background: color-mix(in srgb, var(--bg) 85%, transparent); padding: 14px 16px; }
+  dt { font-family: var(--font-mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  dd { margin: 4px 0 0; font-weight: 600; }
+  dd.acc { color: var(--accent); font-family: var(--font-mono); }
+
+  /* ---------- SAISON COMPLÈTE ---------- */
+  /* tableau des événements : photo de la Mustang GT3 #64 en fond, assombrie pour la lisibilité */
+  .tableau {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(16px, 3vw, 32px);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--accent);
+    background: var(--bg);
+  }
+  /* pile de photos : la 1re remplit un tableau court ; si la liste s'allonge,
+     les suivantes s'empilent au format 16/9 avec un fondu entre chaque */
+  .tableau-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    container-type: size;
+  }
+  .tableau-bg :global(img) {
+    flex: none;
+    width: 100%;
+    height: max(56.25cqw, 420px);
+    object-fit: cover;
+    object-position: 70% 50%;
+    margin-top: -12%;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22%, #000 78%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0, #000 22%, #000 78%, transparent 100%);
+  }
+  .tableau-bg :global(img:first-child) {
+    height: min(100cqh, max(56.25cqw, 480px));
+    object-position: 75% 45%;
+    margin-top: 0;
+    -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+  }
+  /* voile : plus sombre à gauche (dates, noms), la voiture reste visible à droite */
+  .tableau::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, rgba(6, 17, 23, .88) 0%, rgba(6, 17, 23, .78) 45%, rgba(6, 17, 23, .55) 100%);
+  }
+  .tableau .mois:last-of-type { margin-bottom: 0; }
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filters button {
+    padding: 10px 18px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition: color .2s, background .2s, border-color .2s;
+  }
+  .filters button:hover { color: var(--text); border-color: var(--text); }
+  .filters button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .toggle { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); cursor: pointer; }
+  .toggle input { width: 16px; height: 16px; accent-color: var(--accent); }
+
+  .mois { margin-bottom: 36px; }
+  .mois[hidden], .ev[hidden] { display: none; }
+  .mois-titre {
+    font-size: 1.1rem;
+    letter-spacing: .14em;
+    color: var(--accent);
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .liste { list-style: none; margin: 0; padding: 0; }
+  .ev {
+    display: grid;
+    grid-template-columns: 170px 1fr 220px 150px 80px;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 12px;
+    border-bottom: 1px solid var(--line);
+    transition: background .2s;
+  }
+  .ev:hover { background: rgba(6, 17, 23, .55); }
+  .ev-date { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; text-transform: uppercase; }
+  .ev-nom { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.45rem; text-transform: uppercase; line-height: 1.05; }
+  .ev-circuit { margin: 4px 0 0; color: var(--muted); font-size: .68rem; }
+  .ev-classes { color: var(--muted); font-size: .68rem; }
+  .tag { justify-self: start; padding: 4px 10px; font-size: .62rem; box-shadow: inset 0 0 0 1px var(--line); color: var(--muted); }
+  .tag.team { color: var(--accent-2); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent); }
+  .tag.super { color: var(--text); }
+  .ev-statut { text-align: right; color: var(--muted); font-size: .7rem; }
+
+  /* course où Ascendia est engagée */
+  .ev.ascendia { background: color-mix(in srgb, var(--accent) 12%, transparent); box-shadow: inset 3px 0 0 var(--accent); }
+  .ev.ascendia .tag { background: var(--accent); color: var(--accent-ink); box-shadow: none; }
+  .ev.ascendia .ev-statut, .ev.prochain .ev-statut, .ev.en-cours .ev-statut { color: var(--accent); }
+  .ev.passe { opacity: .45; }
+
+  .vide { color: var(--muted); padding: 24px 0; }
+  .source { color: var(--muted); font-size: .62rem; margin-top: 8px; }
+
+  @media (max-width: 1000px) {
+    .ev { grid-template-columns: 140px 1fr auto 60px; }
+    .ev-classes { display: none; }
+  }
+  @media (max-width: 860px) {
+    .feature { grid-template-columns: 1fr; }
+    .poster { max-width: 420px; }
+  }
+  @media (max-width: 600px) {
+    .ev { grid-template-columns: 1fr auto; gap: 6px 12px; padding: 14px 8px; }
+    .ev-date { grid-column: 1; font-size: 1.05rem; color: var(--accent); }
+    .ev-statut { grid-column: 2; grid-row: 1; }
+    .ev-info { grid-column: 1 / -1; }
+    .tag { grid-column: 1 / -1; }
+    .spec { grid-template-columns: 1fr; }
+  }
+</style>

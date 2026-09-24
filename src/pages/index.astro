@@ -1,0 +1,353 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import Sponsors from '../components/Sponsors.astro';
+import { evenements, plage } from '../data/courses';
+import pegase from '../assets/logo/pegase.png';
+import photoCadillac from '../assets/cadillac-17.png';
+import fondReseaux from '../assets/reseaux-fond.webp';
+import { siTwitch, siYoutube, siInstagram } from 'simple-icons';
+
+const reseaux = [
+  { nom: 'Twitch', compte: 'ascendiatv', url: 'https://www.twitch.tv/ascendiatv', icone: siTwitch, couleur: '#9146ff' },
+  { nom: 'YouTube', compte: '@AscendiaRacingTeamTV', url: 'https://www.youtube.com/@AscendiaRacingTeamTV', icone: siYoutube, couleur: '#ff0033' },
+  { nom: 'Instagram', compte: '@ascendiaracingteam', url: 'https://www.instagram.com/ascendiaracingteam/', icone: siInstagram, couleur: '#e1306c' },
+];
+
+const courses = evenements.filter((e) => e.type === 'team' || e.ascendia);
+const arrow = `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>`;
+---
+<Base>
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="pegase" aria-hidden="true">
+      <Image src={pegase} alt="" widths={[500, 900]} sizes="(max-width: 860px) 80vw, 46vw" loading="eager" />
+    </div>
+
+    <div class="wrap hero-inner">
+      <h1 class="load" style="--d:.2s">
+        <span class="l1">Ascendia</span>
+        <span class="l2">Racing Team</span>
+      </h1>
+      <p class="lead load" style="--d:.35s">
+        Une équipe d'endurance virtuelle sur <strong>iRacing</strong>.
+        Relais de nuit, stratégie au litre près et une seule direction : vers le haut.
+      </p>
+      <div class="ctas load" style="--d:.45s">
+        <a href="#reseaux" class="btn btn-primary">Nous suivre <Fragment set:html={arrow} /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MANIFESTE ================= -->
+  <section class="section wrap manifesto">
+    <p class="kicker reveal">L'esprit Ascendia</p>
+    <h2 class="reveal" style="--d:.1s">
+      L'ascension progressive est le point de départ idéal <em>pour atteindre le sommet.</em>
+    </h2>
+    <div class="manifesto-cols">
+      <div class="manifesto-text">
+        <p class="reveal" style="--d:.15s">
+          <strong>Ascendia Racing, c'est un club de simracing ouvert à tous les niveaux</strong>, du pilote qui
+          découvre ses premiers relais au chasseur de chronos. Ensemble, on s'aligne sur des courses d'endurance
+          où chaque tour compte et où la victoire se construit en équipe.
+        </p>
+        <p class="reveal" style="--d:.25s">
+          Ici, on roule pour apprendre et progresser : des équipages soudés, un staff à l'écoute et tous les outils
+          pour t'améliorer course après course. Et surtout, pour prendre du plaisir, du premier tour jusqu'au drapeau
+          à damier.
+        </p>
+      </div>
+
+      <Image
+        src={photoCadillac}
+        alt="La Cadillac V-Series.R n°17 aux couleurs d'Ascendia Racing en piste sur iRacing"
+        class="manifesto-photo reveal"
+        style="--d:.2s"
+        widths={[600, 1000]}
+        sizes="(max-width: 860px) 100vw, 50vw"
+      />
+    </div>
+  </section>
+
+  <Sponsors />
+
+  <!-- ================= CALENDRIER ================= -->
+  <section class="section wrap" aria-labelledby="t-cal">
+    <div class="section-head">
+      <div>
+        <p class="kicker">À venir</p>
+        <h2 id="t-cal">Prochaines <em>courses</em></h2>
+      </div>
+      <a href="/calendrier" class="link-arrow">Calendrier complet →</a>
+    </div>
+    <!-- toutes les courses d'endurance en équipe ; le script n'affiche que les 4 prochaines -->
+    <ol class="board">
+      {courses.map((c, i) => (
+        <li class:list={['reveal', { ascendia: c.ascendia }]} style={`--d:${(i % 4) * 0.06}s`} data-debut={c.debut} data-fin={c.fin}>
+          <time datetime={c.debut}>
+            <strong>{plage(c.debut, c.fin).replace(/\s\S+$/, '')}</strong>
+            <span class="mono">{plage(c.fin, c.fin).split(' ')[1]}</span>
+          </time>
+          <div class="ev">
+            <p class="ev-name">{c.nom}</p>
+            <p class="mono ev-meta">{c.circuit}</p>
+          </div>
+          <span class="mono tag">{c.classes}</span>
+          <span class:list={['mono', 'tag', 'game', { engage: c.ascendia }]}>{c.ascendia ? 'Ascendia engagée' : 'Team Event'}</span>
+          <span class="mono dur" data-compte></span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ================= NOS RÉSEAUX ================= -->
+  <section id="reseaux" class="reseaux" aria-labelledby="t-reseaux">
+    <Image
+      src={fondReseaux}
+      alt=""
+      class="reseaux-bg"
+      widths={[768, 1280, 1920]}
+      sizes="100vw"
+    />
+    <div class="wrap reseaux-inner">
+      <p class="kicker">Suivez la team</p>
+      <h2 id="t-reseaux">Nos <em>réseaux</em></h2>
+      <ul class="reseaux-grid">
+        {reseaux.map((r, i) => (
+          <li class="reveal" style={`--d:${i * 0.08}s`}>
+            <a href={r.url} target="_blank" rel="noopener noreferrer" style={`--brand:${r.couleur}`}>
+              <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path d={r.icone.path} fill="currentColor" /></svg>
+              <span class="r-nom">{r.nom}</span>
+              <span class="mono r-compte">{r.compte}</span>
+              <span class="r-arrow" set:html={arrow} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // N'affiche que les 4 prochaines courses (celles déjà terminées sont masquées)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  let affichees = 0;
+  document.querySelectorAll<HTMLElement>('.board li').forEach((li) => {
+    const debut = new Date(li.dataset.debut + 'T00:00:00');
+    const fin = new Date(li.dataset.fin + 'T00:00:00');
+    if (today > fin || affichees >= 4) { li.hidden = true; return; }
+    affichees++;
+    const j = Math.round((debut.getTime() - today.getTime()) / 864e5);
+    li.querySelector<HTMLElement>('[data-compte]')!.textContent = j <= 0 ? 'En cours' : `J-${j}`;
+  });
+</script>
+
+<style>
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    padding-top: 110px;
+    background: radial-gradient(90% 70% at 85% 30%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%);
+  }
+
+  /* le Pégase de la team, en grand derrière le titre */
+  .pegase {
+    position: absolute;
+    right: 2%;
+    top: 90px;
+    width: min(46vw, 640px);
+    pointer-events: none;
+    filter: drop-shadow(0 30px 60px rgba(0, 0, 0, .55));
+    animation: fly 1.4s var(--ease) .2s both;
+  }
+  .pegase :global(img) { width: 100%; height: auto; }
+  @keyframes fly { from { opacity: 0; transform: translate(-40px, 40px) scale(.96); } to { opacity: 1; transform: none; } }
+
+  .hero-inner {
+    position: relative;
+    display: grid;
+    grid-template-areas: "t" "l" "c";
+    padding-bottom: 56px;
+  }
+  h1 { grid-area: t; margin: 18px 0 28px; }
+  .l1 {
+    display: block;
+    font-size: clamp(4.4rem, 17vw, 15.5rem);
+    font-weight: 900;
+    line-height: .8;
+    letter-spacing: -.02em;
+  }
+  .l2 {
+    display: block;
+    font-size: clamp(1.8rem, 5.6vw, 5rem);
+    font-weight: 800;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--text);
+    letter-spacing: .04em;
+    margin-top: 8px;
+  }
+  .lead { grid-area: l; max-width: 52ch; color: var(--muted); font-size: 1.1rem; margin: 0 0 30px; }
+  .lead strong { color: var(--text); font-weight: 600; }
+  .ctas { grid-area: c; display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .load { animation: up .9s var(--ease) both; animation-delay: var(--d, 0s); }
+  @keyframes up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- MANIFESTE ---------- */
+  .manifesto h2 {
+    font-size: clamp(2.4rem, 6.4vw, 5.4rem);
+    margin: 22px 0 48px;
+  }
+  .manifesto h2 em { font-style: normal; color: var(--accent); }
+  .manifesto-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+  .manifesto-text { color: var(--muted); font-size: 1.08rem; }
+  .manifesto-text p:first-child { margin-top: 0; }
+  .manifesto-text strong { color: var(--text); font-weight: 600; }
+  :global(.manifesto-photo) {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--accent);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, .45);
+  }
+
+  /* ---------- BOARD COURSES ---------- */
+  .board { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .board li {
+    display: grid;
+    grid-template-columns: 150px 1fr auto auto 60px;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 8px;
+    border-bottom: 1px solid var(--line);
+    transition: background .25s, padding .25s var(--ease);
+  }
+  .board li:hover { background: var(--bg-2); padding-left: 20px; }
+  time { display: flex; align-items: baseline; gap: 8px; }
+  time strong { font-family: var(--font-display); font-size: 2.2rem; line-height: 1; white-space: nowrap; }
+  .board li[hidden] { display: none; }
+  time .mono { color: var(--accent); }
+  .ev-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    line-height: 1.05;
+  }
+  .ev-meta { margin: 4px 0 0; color: var(--muted); font-size: .7rem; }
+  .tag { padding: 4px 10px; box-shadow: inset 0 0 0 1px var(--line); font-size: .68rem; }
+  .tag.game { background: var(--bg-3); box-shadow: none; }
+  .dur { text-align: right; color: var(--muted); }
+  /* course où Ascendia est engagée */
+  .board li.ascendia { background: color-mix(in srgb, var(--accent) 12%, transparent); box-shadow: inset 3px 0 0 var(--accent); }
+  .tag.engage { background: var(--accent); color: var(--accent-ink); }
+  .board li.ascendia .dur { color: var(--accent); }
+
+  /* ---------- NOS RÉSEAUX ---------- */
+  .reseaux {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    min-height: clamp(620px, 56vw, 860px);
+    padding: clamp(120px, 12vw, 170px) 0 clamp(48px, 5vw, 72px);
+    margin-top: 40px;
+    overflow: hidden;
+    clip-path: polygon(0 60px, 100% 0, 100% 100%, 0 100%);
+  }
+  /* image de fond : les voitures restent visibles à droite */
+  :global(.reseaux-bg) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 70% center;
+  }
+  /* fondu : sombre à gauche pour le texte, fondu haut/bas pour se raccorder au reste de la page */
+  .reseaux::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, rgba(6, 17, 23, .92) 0%, rgba(6, 17, 23, .7) 32%, rgba(6, 17, 23, 0) 62%),
+      linear-gradient(180deg, rgba(6, 17, 23, .55) 0%, transparent 22%, transparent 78%, var(--bg) 100%);
+  }
+  .reseaux-inner { width: 100%; }
+  .reseaux h2 { font-size: clamp(3rem, 8vw, 6.4rem); margin: 18px 0 clamp(28px, 4vw, 44px); }
+  .reseaux h2 em { font-style: normal; color: var(--accent); }
+  .reseaux-grid {
+    display: grid;
+    gap: 12px;
+    max-width: 460px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .reseaux-grid a {
+    position: relative;
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    grid-template-rows: auto auto;
+    column-gap: 18px;
+    align-items: center;
+    padding: 18px 22px;
+    background: rgba(6, 17, 23, .55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-left: 3px solid var(--brand);
+    color: var(--text);
+    text-decoration: none;
+    transition: background .3s, transform .3s var(--ease), border-color .3s;
+  }
+  .reseaux-grid a:hover { background: var(--brand); border-color: var(--brand); transform: translateX(6px); }
+  .reseaux-grid svg { grid-row: span 2; width: 34px; height: 34px; color: var(--brand); transition: color .3s; }
+  .reseaux-grid a:hover svg { color: #fff; }
+  .r-nom {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.9rem;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .r-compte { grid-column: 2; color: var(--muted); transition: color .3s; }
+  .reseaux-grid a:hover .r-compte { color: rgba(255, 255, 255, .85); }
+  .r-arrow { grid-column: 3; grid-row: 1 / span 2; transition: transform .3s var(--ease); }
+  .reseaux-grid a:hover .r-arrow { transform: translate(4px, -4px) rotate(-45deg); }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px) {
+    /* sur mobile : l'image devient un bandeau en haut, le texte passe dessous */
+    .reseaux { min-height: 0; padding-top: calc(62vw + 40px); background: var(--bg); }
+    :global(.reseaux-bg) { height: calc(72vw + 60px); object-position: 72% 60%; }
+    .reseaux::after {
+      background: linear-gradient(180deg, rgba(6, 17, 23, .3) 0%, transparent 25%, transparent 45%, var(--bg) calc(72vw + 60px));
+    }
+    .reseaux-grid { max-width: none; }
+  }
+  @media (max-width: 860px) {
+    .pegase { width: 78vw; right: -18vw; top: 70px; animation: none; opacity: .22; }
+    .manifesto-cols { grid-template-columns: 1fr; gap: 24px; }
+    .board li { grid-template-columns: 1fr auto; row-gap: 6px; }
+    .board time { grid-column: 1; }
+    .board .dur { grid-column: 2; grid-row: 1; }
+    .board .ev { grid-column: 1 / -1; }
+    .board .tag:not(.game) { display: none; }
+    time strong { font-size: 1.6rem; }
+  }
+</style>

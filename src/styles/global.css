@@ -1,0 +1,191 @@
+/* ==========================================================
+   ASCENDIA RACING TEAM — styles globaux
+   Pour changer les couleurs de la team, modifie uniquement
+   les variables --accent et --accent-2 ci-dessous.
+   ========================================================== */
+
+:root {
+  /* Couleurs de la team, tirées du logo Pégase et des livrées */
+  --accent: #12a8d8;        /* cyan de la crinière */
+  --accent-2: #b4eef2;      /* bleu glace */
+  --accent-ink: #04161d;    /* texte posé sur l'accent */
+  --petrol: #0f4454;        /* pétrole des livrées */
+
+  /* Fond pétrole très sombre et textes */
+  --bg: #061117;
+  --bg-2: #0a1a22;
+  --bg-3: #10252f;
+  --line: #1a3441;
+  --text: #ecf6f8;
+  --muted: #86a2ad;
+
+  /* Typographies */
+  --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --font-body: "Archivo", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --wrap: 1240px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+/* les ancres (#pilotes, #garage…) ne passent pas sous le menu fixe */
+[id] { scroll-margin-top: 90px; }
+
+body {
+  margin: 0;
+  /* motif de la combinaison, assombri pour garder les textes lisibles */
+  background:
+    linear-gradient(color-mix(in srgb, var(--bg) 80%, transparent), color-mix(in srgb, var(--bg) 86%, transparent)),
+    url("/fond-combinaison.svg") center top / cover fixed,
+    var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; }
+
+::selection { background: var(--accent); color: var(--accent-ink); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  z-index: 200;
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 8px 14px;
+  font-weight: 700;
+}
+.skip:focus { left: 8px; }
+
+/* ---------- Typo ---------- */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: .92;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.kicker::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+}
+
+/* ---------- Boutons ---------- */
+.btn {
+  --cut: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 28px 16px 24px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  clip-path: polygon(0 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+  transition: transform .25s var(--ease), background .25s, color .25s;
+}
+.btn svg { transition: transform .25s var(--ease); }
+.btn:hover svg { transform: translateX(4px); }
+
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: var(--text); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  box-shadow: inset 0 0 0 1.5px var(--line);
+}
+.btn-ghost:hover { box-shadow: inset 0 0 0 1.5px var(--text); }
+
+/* ---------- En-tête de section ---------- */
+.section { padding-block: clamp(72px, 10vw, 140px); }
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+.section-head h2 { font-size: clamp(2.6rem, 7vw, 5.2rem); }
+.section-head h2 em { font-style: normal; color: var(--accent); }
+
+.link-arrow {
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 4px;
+  transition: color .2s, border-color .2s;
+}
+.link-arrow:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ---------- Apparition au scroll ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+  transition-delay: var(--d, 0s);
+}
+.reveal.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  html { scroll-behavior: auto; }
+}

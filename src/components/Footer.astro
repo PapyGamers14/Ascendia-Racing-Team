@@ -1,0 +1,58 @@
+---
+import Logo from './Logo.astro';
+import Social from './Social.astro';
+const annee = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <Logo size={40} />
+        <p class="tag">Team d'endurance virtuelle · iRacing</p>
+      </div>
+      <nav aria-label="Pied de page">
+        <p class="mono label">Navigation</p>
+        <a href="/calendrier">Calendrier</a>
+        <a href="/#reseaux">Nos réseaux</a>
+      </nav>
+      <div>
+        <p class="mono label">Suivre la team</p>
+        <Social />
+      </div>
+    </div>
+    <div class="legal mono">
+      <span>© {annee} Ascendia Racing Team</span>
+      <span>Box ouvert · Lap after lap</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--bg);
+    padding-top: 36px;
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 36px;
+  }
+  .tag { color: var(--muted); max-width: 32ch; margin-top: 16px; }
+  .label { color: var(--muted); margin: 0 0 14px; }
+  nav { display: flex; flex-direction: column; gap: 6px; }
+  nav a { text-decoration: none; transition: color .2s; }
+  nav a:hover { color: var(--accent); }
+  .legal {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-block: 22px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+  }
+  @media (max-width: 760px) {
+    .cols { grid-template-columns: 1fr; }
+  }
+</style>

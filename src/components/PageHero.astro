@@ -1,0 +1,38 @@
+---
+interface Props { kicker: string; titre: string; accent: string; intro?: string; index: string }
+const { kicker, titre, accent, intro, index } = Astro.props;
+---
+<section class="ph">
+  <span class="big-index" aria-hidden="true">{index}</span>
+  <div class="wrap">
+    <p class="kicker">{kicker}</p>
+    <h1>{titre}<em>{accent}</em></h1>
+    {intro && <p class="intro">{intro}</p>}
+  </div>
+</section>
+
+<style>
+  .ph {
+    position: relative;
+    padding: 180px 0 64px;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    animation: up .9s var(--ease) both;
+  }
+  .big-index {
+    position: absolute;
+    right: -2vw;
+    bottom: -4vw;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(10rem, 30vw, 26rem);
+    line-height: .8;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--line);
+    pointer-events: none;
+  }
+  h1 { position: relative; font-size: clamp(3.4rem, 11vw, 9rem); margin-top: 18px; }
+  em { font-style: normal; color: var(--accent); }
+  .intro { position: relative; max-width: 56ch; color: var(--muted); font-size: 1.1rem; margin: 24px 0 0; }
+  @keyframes up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+</style>
