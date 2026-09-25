@@ -1,0 +1,262 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PortraitDrapeau from '../components/PortraitDrapeau.astro';
+import { siTwitch, siYoutube, siKick, siTiktok } from 'simple-icons';
+import { membres, photoDe, aPortrait } from '../data/team';
+import { streamers, chaineOfficielle } from '../data/streamers';
+
+// Domaines autorisés à afficher le lecteur Twitch (exigence de Twitch)
+const parents = ['ascendia-racing.vercel.app', 'localhost'];
+const lecteur = `https://player.twitch.tv/?channel=${chaineOfficielle.twitch}&${parents.map((p) => `parent=${p}`).join('&')}&muted=true&autoplay=false`;
+
+const nomComplet = (m: (typeof membres)[number]) => [m.prenom, m.nom].filter(Boolean).join(' ');
+const normaliser = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+
+// chaque streamer est relié à sa fiche Team (portrait, drapeau, rôle)
+const cartes = streamers
+  .map((s) => ({ ...s, membre: membres.find((m) => normaliser(nomComplet(m)) === normaliser(s.nom)) }))
+  .sort((a, b) => a.nom.localeCompare(b.nom, 'fr'));
+
+const plateformes = [
+  { cle: 'twitch', nom: 'Twitch', icone: siTwitch, couleur: '#9146ff', url: (v: string) => `https://www.twitch.tv/${v}` },
+  { cle: 'youtube', nom: 'YouTube', icone: siYoutube, couleur: '#ff0033', url: (v: string) => v },
+  { cle: 'kick', nom: 'Kick', icone: siKick, couleur: '#53fc18', url: (v: string) => v },
+  { cle: 'tiktok', nom: 'TikTok', icone: siTiktok, couleur: '#25f4ee', url: (v: string) => v },
+] as const;
+
+// Couleur de la carte selon la ou les plateformes du streamer :
+// une seule → contour de sa couleur ; plusieurs → contour en dégradé (fondu entre les couleurs)
+const styleCarte = (s: (typeof cartes)[number], i: number) => {
+  const couleurs = plateformes.filter((p) => s[p.cle]).map((p) => p.couleur);
+  const principale = couleurs[0] ?? '#9146ff';
+  const degrade = couleurs.length > 1
+    ? `linear-gradient(135deg, ${couleurs.map((c, k) => `${c} ${Math.round(15 + (70 * k) / (couleurs.length - 1))}%`).join(', ')})`
+    : 'none';
+  return `--d:${(i % 6) * 0.05}s; --plat:${principale}; --degrade:${degrade}`;
+};
+---
+<Base title="Streams" description="Les streams de l'Ascendia Racing Team : la chaîne officielle AscendiaTV et les chaînes Twitch, YouTube et Kick de nos pilotes iRacing et LMU.">
+  <PageHero
+    index="05"
+    kicker="En direct du cockpit"
+    titre="Nos "
+    accent="streams"
+    intro="Relais de nuit, qualifs sous la pluie, fous rires au Discord : suivez les pilotes Ascendia en direct."
+  />
+
+  <!-- ================= CHAÎNE OFFICIELLE ================= -->
+  <section class="wrap officielle" aria-labelledby="t-officielle">
+    <div class="lecteur reveal">
+      <iframe
+        src={lecteur}
+        title="Lecteur Twitch de la chaîne AscendiaTV"
+        allowfullscreen
+        loading="lazy"
+      ></iframe>
+    </div>
+    <div class="officielle-infos reveal" style="--d:.1s">
+      <p class="kicker">Chaîne officielle</p>
+      <h2 id="t-officielle">Ascendia<em>TV</em></h2>
+      <p class="live mono" data-live={chaineOfficielle.twitch} hidden><i></i>En direct</p>
+      <p class="texte">Les grandes courses de la team en direct : endurance, Special Events et soirées entre pilotes.</p>
+      <div class="boutons">
+        <a class="btn-plateforme" style="--c:#9146ff" href={`https://www.twitch.tv/${chaineOfficielle.twitch}`} target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d={siTwitch.path} fill="currentColor" /></svg>
+          Suivre sur Twitch
+        </a>
+        <a class="btn-plateforme" style="--c:#ff0033" href={chaineOfficielle.youtube} target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d={siYoutube.path} fill="currentColor" /></svg>
+          YouTube
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STREAMERS ================= -->
+  <section class="section wrap" aria-labelledby="t-pilotes">
+    <div class="section-head">
+      <div>
+        <p class="kicker">Les pilotes</p>
+        <h2 id="t-pilotes">Nos <em>streamers</em></h2>
+      </div>
+      {cartes.length > 0 && <p class="mono compte">{cartes.length} chaîne{cartes.length > 1 ? 's' : ''}</p>}
+    </div>
+
+    {cartes.length > 0 ? (
+      <ul class="grille">
+        {cartes.map((s, i) => (
+          <li
+            class:list={['carte', 'reveal', { multi: plateformes.filter((p) => s[p.cle]).length > 1 }]}
+            style={styleCarte(s, i)}
+            data-twitch={s.twitch}
+          >
+            <div class="carte-visuel">
+              {s.membre ? (
+                <PortraitDrapeau
+                  class="carte-img"
+                  src={photoDe(s.membre)}
+                  alt={aPortrait(s.membre) ? `${s.nom}, pilote Ascendia Racing` : `Avatar pilote Ascendia Racing casqué, pour ${s.nom}`}
+                  pays={s.membre.pays}
+                  widths={[300, 500]}
+                  sizes="(max-width: 600px) 45vw, 200px"
+                />
+              ) : (
+                <div class="carte-img sans-membre" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="56" height="56"><path d={siTwitch.path} fill="currentColor" /></svg>
+                </div>
+              )}
+              <span class="badge-live mono" hidden><i></i>Live</span>
+            </div>
+            <div class="carte-txt">
+              {s.membre && <p class="mono role">{s.membre.role}</p>}
+              <h3>{s.nom}</h3>
+              <div class="liens">
+                {plateformes.map((p) => {
+                  const v = s[p.cle];
+                  return v && (
+                    <a style={`--c:${p.couleur}`} href={p.url(v)} target="_blank" rel="noopener noreferrer" aria-label={`${s.nom} sur ${p.nom}`}>
+                      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d={p.icone.path} fill="currentColor" /></svg>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="vide">Les chaînes de nos pilotes arrivent très bientôt.</p>
+    )}  </section>
+</Base>
+
+<script>
+  // Badge « En direct » : on demande à decapi.me (service public, sans compte) si la chaîne
+  // Twitch est en live. En cas d'erreur, aucun badge ne s'affiche : la page reste utilisable.
+  const estEnLive = async (chaine: string) => {
+    try {
+      const r = await fetch(`https://decapi.me/twitch/uptime/${encodeURIComponent(chaine)}`);
+      const t = (await r.text()).toLowerCase();
+      return r.ok && !t.includes('offline') && !t.includes('error') && !t.includes('not found');
+    } catch {
+      return false;
+    }
+  };
+  document.querySelectorAll<HTMLElement>('[data-live]').forEach(async (el) => {
+    if (await estEnLive(el.dataset.live!)) el.hidden = false;
+  });
+  document.querySelectorAll<HTMLElement>('.carte[data-twitch]').forEach(async (carte) => {
+    if (await estEnLive(carte.dataset.twitch!)) {
+      carte.classList.add('en-live');
+      carte.querySelector<HTMLElement>('.badge-live')!.hidden = false;
+    }
+  });
+</script>
+
+<style>
+  /* ---------- CHAÎNE OFFICIELLE ---------- */
+  .officielle {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+    padding-top: clamp(40px, 6vw, 72px);
+  }
+  .lecteur {
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--line);
+    border-top: 3px solid #9146ff;
+    background: #0e0e10;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, .45);
+  }
+  .lecteur iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .officielle-infos h2 { font-size: clamp(2.8rem, 6vw, 4.6rem); margin: 14px 0 12px; }
+  .officielle-infos h2 em { font-style: normal; color: #9146ff; }
+  .texte { color: var(--muted); margin: 12px 0 24px; }
+  .boutons { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn-plateforme {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #fff;
+    background: var(--c);
+    transition: filter .2s, transform .2s var(--ease);
+  }
+  .btn-plateforme:hover { filter: brightness(1.12); transform: translateY(-2px); }
+
+  /* indicateur « en direct » */
+  .live { display: inline-flex; align-items: center; gap: 8px; margin: 0; color: #ff4655; }
+  .live[hidden], .badge-live[hidden] { display: none; }
+  .live i, .badge-live i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: clignote 1.2s infinite; }
+  @keyframes clignote { 50% { opacity: .25; } }
+
+  /* ---------- GRILLE DES STREAMERS ---------- */
+  .compte { color: var(--muted); }
+  .grille {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .carte {
+    display: flex;
+    flex-direction: column;
+    background: color-mix(in srgb, var(--bg-2) 90%, transparent);
+    /* couleur de la plateforme : violet Twitch, rouge YouTube, vert Kick, cyan TikTok */
+    border: 3px solid var(--plat, #9146ff);
+    overflow: hidden;
+    transition: box-shadow .3s, transform .3s var(--ease);
+  }
+  /* plusieurs plateformes : contour en dégradé avec fondu entre leurs couleurs */
+  .carte.multi { border-image: var(--degrade) 1; }
+  .carte:hover { transform: translateY(-4px); box-shadow: 0 12px 32px color-mix(in srgb, var(--plat) 35%, transparent); }
+  .carte.en-live { border-color: #ff4655; border-image: none; box-shadow: 0 0 0 2px rgba(255, 70, 85, .35); }
+  .carte-visuel { position: relative; }
+  .carte :global(.carte-img) { aspect-ratio: 3 / 4; }
+  .carte :global(.pd-img) { object-position: 50% 12%; }
+  .sans-membre { display: grid; place-items: center; color: var(--plat); background: #0e0e10; }
+  .badge-live {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    font-size: .6rem;
+    color: #fff;
+    background: #e91916;
+  }
+  .carte-txt { padding: 12px 12px 14px; border-top: 2px solid var(--plat); }
+  .role { margin: 0; color: color-mix(in srgb, var(--plat) 65%, #fff); font-size: .6rem; }
+  .carte h3 { margin: 6px 0 10px; font-size: 1.2rem; line-height: 1.05; }
+  .liens { display: flex; gap: 6px; }
+  .liens a {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    color: var(--c);
+    box-shadow: inset 0 0 0 1px var(--line);
+    transition: background .2s, color .2s;
+  }
+  .liens a:hover { background: var(--c); color: #fff; }
+
+  .vide { color: var(--muted); }
+
+  @media (max-width: 1000px) {
+    .officielle { grid-template-columns: 1fr; }
+    .grille { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 760px) { .grille { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .grille { grid-template-columns: 1fr 1fr; } }
+</style>

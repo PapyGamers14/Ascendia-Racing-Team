@@ -1,0 +1,236 @@
+﻿---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PortraitDrapeau from '../components/PortraitDrapeau.astro';
+import { membres, groupes, photoDe, aPortrait, GRANDES_FICHES, type Membre } from '../data/team';
+
+// classe CSS selon le jeu : iRacing → bleu Ford, LMU → rouge Ferrari
+const jeuClasse = (j: string) => (/iracing/i.test(j) ? 'ir' : /lmu|le mans ultimate/i.test(j) ? 'lmu' : '');
+
+const nomComplet = (m: Membre) => [m.prenom, m.nom].filter(Boolean).join(' ');
+const altDe = (m: Membre) =>
+  aPortrait(m) ? `${nomComplet(m)}, ${m.role}, en combinaison Ascendia Racing` : `Avatar pilote Ascendia Racing casqué, pour ${nomComplet(m)}`;
+
+const parGroupe = groupes
+  .map((g) => ({ ...g, liste: membres.filter((m) => m.groupe === g.id) }))
+  .filter((g) => g.liste.length > 0);
+const grandes = parGroupe.filter((g) => GRANDES_FICHES.includes(g.id));
+const grilles = parGroupe.filter((g) => !GRANDES_FICHES.includes(g.id));
+---
+<Base title="Team" description="La team Ascendia Racing : les fondateurs Damien Wuilmus et Antoine Barbosa, le staff, pilotes compétition et pilotes de l'Academy du club de simracing d'endurance sur iRacing.">
+  <PageHero
+    index="02"
+    kicker="Ascendia Racing"
+    titre="La "
+    accent="team"
+    intro={`${membres.length} membres, un seul casque : fondateurs, administrateurs, staff, pilotes compétition et Academy font vivre l'Ascendia, relais après relais.`}
+  />
+
+  <!-- sommaire de la page -->
+  <nav class="wrap sommaire" aria-label="Sections de la team">
+    {parGroupe.map((g) => (
+      <a href={`#${g.id}`}>
+        <strong>{g.liste.length}</strong>
+        <span class="mono">{g.accent}</span>
+      </a>
+    ))}
+  </nav>
+
+  <!-- ================= FONDATEURS (gauche) + ADMINISTRATEURS (droite) : grandes fiches sur une même rangée ================= -->
+  <div class="wrap bloc rangee">
+  {grandes.map((g) => (
+    <section id={g.id} class="groupe-grand" aria-labelledby={`t-${g.id}`}>
+      <div class="section-head">
+        <div>
+          <p class="kicker">{g.kicker}</p>
+          <h2 id={`t-${g.id}`}>{g.titre}<em>{g.accent}</em></h2>
+        </div>
+      </div>
+      <div class="duo">
+      {g.liste.map((m, i) => (
+        <article class="fiche reveal" style={`--d:${i * 0.12}s`}>
+          <div class="portrait">
+            <PortraitDrapeau class="portrait-img" src={photoDe(m)} alt={altDe(m)} pays={m.pays} widths={[400, 700, 1024]} sizes="(max-width: 860px) 90vw, 280px" loading={g.id === 'fondateur' ? 'eager' : 'lazy'} />
+          </div>
+          <div class="infos">
+            <p class="kicker">{m.role}</p>
+            <h3>
+              <span class="prenom">{m.prenom}</span>
+              <span class="nom">{m.nom}</span>
+            </h3>
+          </div>
+        </article>
+      ))}
+      </div>
+    </section>
+  ))}
+  </div>
+
+  <!-- ================= STAFF / COMPÉTITION / ACADEMY / CLUB : grilles de cartes ================= -->
+  {grilles.map((g) => (
+    <section id={g.id} class:list={['wrap', 'bloc', g.id]} aria-labelledby={`t-${g.id}`}>
+      <div class="section-head">
+        <div>
+          <p class="kicker">{g.kicker}</p>
+          <h2 id={`t-${g.id}`}>{g.titre}<em>{g.accent}</em></h2>
+        </div>
+        <p class="mono compte">{g.liste.length} membres</p>
+      </div>
+      <ul class="grille">
+        {g.liste.map((m, i) => (
+          <li class:list={['carte', 'reveal', ...m.jeux.map(jeuClasse)]} style={`--d:${(i % 5) * 0.05}s`}>
+            <PortraitDrapeau class="carte-img" src={photoDe(m)} alt={altDe(m)} pays={m.pays} widths={[300, 500]} sizes="(max-width: 600px) 45vw, 200px" />
+            <div class="carte-txt">
+              <p class="mono role">{m.role}</p>
+              <h3>
+                {m.prenom && <span class="c-prenom">{m.prenom}</span>}
+                <em class="c-nom">{m.nom}</em>
+              </h3>
+              <p class="mono jeux">
+                {m.jeux.map((j, k) => (
+                  <>
+                    {k > 0 && <span class="sep">·</span>}
+                    <span class:list={['jeu', jeuClasse(j)]}>{j}</span>
+                  </>
+                ))}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</Base>
+
+<style>
+  /* ---------- SOMMAIRE ---------- */
+  .sommaire {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1px;
+    margin-top: clamp(40px, 6vw, 64px);
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .sommaire a {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 18px 20px;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    text-decoration: none;
+    transition: background .2s;
+  }
+  .sommaire a:hover { background: var(--bg-3); }
+  .sommaire strong { font-family: var(--font-display); font-weight: 900; font-size: 2.6rem; line-height: 1; color: var(--accent); }
+  .sommaire .mono { color: var(--muted); }
+
+  /* espace entre les catégories (resserré) */
+  .bloc { padding-top: clamp(36px, 4.5vw, 64px); }
+  .bloc:last-of-type { padding-bottom: clamp(48px, 6vw, 80px); }
+  .bloc .section-head { margin-bottom: clamp(18px, 2.5vw, 28px); }
+  .compte { color: var(--muted); }
+
+  /* ---------- FICHES FONDATEURS / ADMINISTRATEURS ---------- */
+  /* une seule rangée : fondateurs à gauche, administrateurs à droite */
+  .rangee {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+  }
+  .groupe-grand .section-head { margin-bottom: 24px; }
+  .groupe-grand .section-head h2 { font-size: clamp(2.2rem, 4.2vw, 3.6rem); }
+  /* dans chaque groupe, les deux fiches côte à côte */
+  .duo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .fiche { display: flex; flex-direction: column; }
+  .infos { padding-top: 24px; }
+
+  /* halo cyan derrière le portrait, comme un projecteur de paddock */
+  .portrait { position: relative; isolation: isolate; }
+  .portrait::before {
+    content: "";
+    position: absolute;
+    inset: 8% 4% 4%;
+    z-index: -1;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 45%, transparent), transparent);
+    filter: blur(40px);
+  }
+  .portrait :global(.portrait-img) {
+    aspect-ratio: 1 / 1;          /* cadrage de la tête à la taille */
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--accent);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, .5);
+  }
+  .portrait :global(.pd-img) { object-position: 50% 6%; }
+  .infos { padding-top: 14px; }
+  .infos h3 { margin: 12px 0 0; }
+  .prenom { display: block; min-height: 1em; font-size: clamp(1.3rem, 1.9vw, 1.8rem); color: var(--accent); }
+  .nom { display: block; font-size: clamp(2rem, 3.2vw, 3rem); line-height: .9; }
+
+  /* ---------- GRILLES DE CARTES ---------- */
+  .grille {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);   /* lignes de 6 cartes */
+    gap: 12px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .carte {
+    display: flex;
+    flex-direction: column;
+    background: color-mix(in srgb, var(--bg-2) 90%, transparent);
+    --bord: var(--line);
+    border: 3px solid var(--bord);   /* contour bien marqué */
+    overflow: hidden;
+    transition: box-shadow .3s, transform .3s var(--ease);
+  }
+  /* contour selon le jeu : iRacing = bleu Ford, LMU = rouge Ferrari, les deux = bicolore */
+  .carte.ir { --bord: var(--ford); }
+  .carte.lmu { --bord: var(--ferrari); }
+  .carte.ir.lmu {
+    --bord: var(--ford);
+    /* fondu progressif là où le bleu et le rouge se rejoignent */
+    border-image: linear-gradient(135deg, var(--ford) 30%, var(--ferrari) 70%) 1;
+  }
+  .carte:hover { box-shadow: 0 12px 32px color-mix(in srgb, var(--bord) 35%, transparent); transform: translateY(-4px); }
+  .carte :global(.carte-img) { aspect-ratio: 3 / 4; }
+  .carte :global(.pd-img) {
+    object-position: 50% 12%;
+    transition: transform .6s var(--ease);
+  }
+  .carte:hover :global(.pd-img) { transform: scale(1.05); }
+  .carte-txt .role, .c-prenom, .c-nom { display: block; }
+  .carte-txt { padding: 12px 12px 14px; border-top: 2px solid var(--accent); }
+  .academie .carte-txt { border-top-color: var(--accent-2); }
+  .role { margin: 0; color: var(--accent); font-size: .62rem; }
+  .academie .role { color: var(--accent-2); }
+  .carte h3 { margin: 8px 0 0; font-size: 1.25rem; line-height: 1; overflow-wrap: anywhere; }
+  .carte h3 .c-prenom { font-size: .8em; color: var(--muted); }
+  .carte h3 .c-nom { font-style: normal; }
+  .jeux { display: flex; align-items: center; gap: 8px; margin: 10px 0 0; color: var(--muted); font-size: .62rem; font-weight: 600; }
+  .jeu.ir { color: var(--ford); }
+  .jeu.lmu { color: var(--ferrari); }
+
+  /* écrans moyens : fondateurs puis administrateurs l'un sous l'autre (toujours 2 fiches par ligne) */
+  @media (max-width: 1000px) {
+    .rangee { grid-template-columns: 1fr; }
+    .grille { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .grille { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .sommaire { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .duo { grid-template-columns: 1fr; }
+    .grille { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .carte h3 { font-size: 1.15rem; }
+  }
+</style>

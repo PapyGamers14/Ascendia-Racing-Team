@@ -1,0 +1,23 @@
+---
+// Petit drapeau en SVG (les émojis drapeaux ne s'affichent pas sous Windows).
+import { drapeaux, type Pays } from '../data/pays';
+
+interface Props { pays: Pays; taille?: number }
+const { pays, taille = 22 } = Astro.props;
+const d = drapeaux[pays];
+---
+<svg class="drapeau" width={taille} height={Math.round(taille * 2 / 3)} viewBox="0 0 3 2" role="img" aria-label={d.nom}>
+  <title>{d.nom}</title>
+  {'bandes' in d
+    ? d.bandes.map((c, i) => <rect x={i} width="1" height="2" fill={c} />)
+    : <Fragment set:html={d.dessin} />}
+</svg>
+
+<style>
+  .drapeau {
+    flex: none;
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .25);
+  }
+</style>

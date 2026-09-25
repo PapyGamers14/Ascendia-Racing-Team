@@ -22,6 +22,57 @@ catégories (Supercars, Sprint Car, Dirt, FF1600, Super Formula Lights, Touring 
 Les courses sur Dallara IR-18 s'écrivent `IndyCar (Dallara IR-18)` pour être reconnues.
 Le filtre dans `courses.ts` applique aussi cette règle automatiquement.
 
+**Calendrier LMU (Le Mans Ultimate)** : liste SÉPARÉE `evenementsLmu` dans `courses.ts`, à ne jamais
+mélanger avec les événements iRacing. Affichée en rouge Ferrari dans sa propre section de la page
+Calendrier. Toutes ses catégories sont gardées (pas de filtre `CATEGORIES_SUIVIES`). Dates données
+par semaine (« w/c » = lundi de la semaine de course) → champ `semaine`.
+Manche LMU où Ascendia est engagée : ajouter `ascendia: 'AAAA-MM-JJ'` (date exacte de la course) et
+déposer l'affiche dans `src/assets/`, puis l'associer au nom de la manche dans `affichesLmu`
+(`calendrier.astro`) → bloc rouge mis en avant au-dessus du calendrier LMU.
+
+## Membres et portraits (page Team)
+
+Les membres sont dans `src/data/team.ts` (groupe, rôle, pays). Le drapeau du `pays` est posé
+automatiquement en fond de chaque portrait par `src/components/PortraitDrapeau.astro` (pas de petit
+drapeau à côté du nom). Pays disponibles dans `src/data/pays.ts` (ajouter une ligne pour un nouveau pays).
+
+Pour un nouveau portrait ou un portrait modifié :
+1. le copier dans `src/assets/team/originaux/` nommé `prenom-nom.webp` (sans accents, en minuscules) ;
+2. lancer `npm run portraits` (détoure automatiquement vers `src/assets/team/detoures/`) ;
+3. rien d'autre : la page retrouve le portrait par le nom. Sans portrait → avatar casqué (`detoures/avatar.webp`).
+
+## Mise à jour des résultats
+
+Les résultats ne sont PAS récupérés automatiquement depuis Instagram (choix de l'utilisateur) :
+l'utilisateur partage directement les affiches de résultats. Pour chacune :
+- copier l'affiche dans `src/assets/resultats/` (nom : `course-equipage.webp`) ;
+- l'ajouter dans `src/data/resultats.ts`, dans la course concernée (ou créer la course) :
+  équipage, position, split, voiture, catégorie, pilotes + pays si l'affiche les nomme ;
+- les podiums (P1 à P3) ajoutés ici apparaissent **automatiquement** dans le Palmarès (rien à faire) ;
+  course LMU : mettre `jeu: 'LMU'` sur la course (iRacing par défaut) ;
+- ne garder que les **3 dernières courses** : quand une nouvelle course est ajoutée, supprimer
+  la plus ancienne de `resultats.ts` ET ses affiches dans `src/assets/resultats/`.
+  **AVANT de la supprimer, archiver ses podiums dans le Palmarès** : copier l'affiche de chaque
+  équipage P1–P3 dans `src/assets/palmares/` et ajouter la ligne correspondante dans `palmares.ts`
+  (avec `annee`), sinon le podium disparaîtrait du Palmarès
+  (la page coupe aussi automatiquement à 3 courses, constante `NB_COURSES`) ;
+- course en **solo** (pas d'équipage sur l'affiche) : laisser `equipe` vide et mettre le pilote
+  dans `pilotes` (il sert alors de titre de carte, avec son drapeau) ; abandon : `position: 'DNF'` ;
+  mention type « Course de consolation » : champ `note` de la course ;
+- ne PAS saisir les numéros de voiture (fictifs) ; les noms des pilotes ne sont pas affichés
+  sur la carte (déjà sur l'affiche) mais restent dans les données pour le texte alternatif.
+
+## Palmarès
+
+Page `/palmares` (victoires et podiums, gardés sur la durée — contrairement à la page Résultats limitée
+aux 3 dernières courses). Données dans `src/data/palmares.ts`, affiches dans `src/assets/palmares/`.
+Pour un nouveau trophée : copier l'affiche, l'importer, ajouter une ligne (`course`, `jeu` iRacing/LMU,
+`equipe`, `position`, `split`, `pilotes`). La page classe automatiquement (victoires puis podiums) et
+recalcule les chiffres. Affiche avec plusieurs équipages (ex. Daytona) : champ `resultats`.
+**Ne garder que les podiums (P1 à P3)** : ignorer les autres classements et les abandons.
+Sans affiche (résultat donné en texte) : omettre `affiche` → visuel aux couleurs du jeu.
+`annee` : à renseigner si l'affiche ou l'utilisateur la donne ; sinon la course compte pour 2026 (défaut).
+
 ## Documentation
 
 Full documentation: https://docs.astro.build

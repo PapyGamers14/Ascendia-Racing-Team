@@ -3,8 +3,10 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import { evenements, libelleType, plage, moisLong } from '../data/courses';
+import LogoJeu from '../components/LogoJeu.astro';
+import { evenements, evenementsLmu, finDeSemaine, libelleType, plage, moisLong } from '../data/courses';
 import affichePLM from '../assets/affiche-petit-le-mans.webp';
+import afficheFuji from '../assets/affiche-lmu-fuji.webp';
 import fondMustang from '../assets/mustang-gt3-fond.webp';
 import fondLumieres from '../assets/fond-lumieres.webp';
 import fondTrio from '../assets/trio-gt3-963-nascar.webp';
@@ -28,16 +30,40 @@ const parMois = evenements.reduce<Record<string, typeof evenements>>((acc, e) =>
 }, {});
 
 const nbTeam = evenements.filter((e) => e.type === 'team').length;
+
+// Calendrier LMU (séparé) : date de fin = dimanche de la semaine de course
+const lmu = evenementsLmu.map((e) => ({ ...e, fin: finDeSemaine(e.semaine) }));
+// Affiches des manches LMU où Ascendia est engagée (clé = nom de la manche)
+const affichesLmu: Record<string, ImageMetadata> = {
+  '6 Hours of Fuji': afficheFuji,
+};
+const lmuEngagees = lmu.filter((e) => e.ascendia);
+const dateLongue = (iso: string) =>
+  new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+const semaineDu = (iso: string) =>
+  new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }).replace('.', '');
 const twitch = 'https://www.twitch.tv/ascendiatv';
 ---
-<Base title="Calendrier" description="Calendrier 2026 des iRacing Special Events et courses d'endurance de l'Ascendia Racing Team : Daytona 24, Spa 24, Petit Le Mans…">
+<Base title="Calendrier" description="Calendrier 2026 de l'Ascendia Racing Team : iRacing Special Events (Daytona 24, Spa 24, Petit Le Mans…) et saison Le Mans Ultimate (Fuji, Road Atlanta, 24 Heures du Mans…).">
   <PageHero
-    index="02"
-    kicker="iRacing Special Events"
+    index="06"
+    kicker="iRacing & Le Mans Ultimate"
     titre="Calendrier "
     accent="2026"
-    intro={`${evenements.length} Special Events en NASCAR, IndyCar, GTP, LMP2, LMP3, GT3 et GT4, dont ${nbTeam} courses d'endurance en équipe. Voici où et quand retrouver Ascendia en piste.`}
+    intro={`${evenements.length} Special Events iRacing, dont ${nbTeam} courses d'endurance en équipe, et ${lmu.length} manches sur Le Mans Ultimate. Voici où et quand retrouver Ascendia en piste.`}
   />
+
+  <!-- raccourcis vers les deux calendriers -->
+  <nav class="wrap jeux-nav" aria-label="Choisir un calendrier">
+    <a class="jn-ir" href="#t-saison">
+      <LogoJeu jeu="iRacing" taille={40} />
+      <span class="jn-txt"><span class="mono">Calendrier</span><strong>iRacing</strong></span>
+    </a>
+    <a class="jn-lmu" href="#t-lmu">
+      <LogoJeu jeu="LMU" taille={40} />
+      <span class="jn-txt"><span class="mono">Calendrier</span><strong>LMU</strong></span>
+    </a>
+  </nav>
 
   <!-- ================= COURSES ASCENDIA ================= -->
   {engagees.map((e) => (
@@ -75,8 +101,8 @@ const twitch = 'https://www.twitch.tv/ascendiatv';
    <div class="wrap section">
     <div class="section-head">
       <div>
-        <p class="kicker">Saison complète</p>
-        <h2 id="t-saison">Tous les <em>événements</em></h2>
+        <p class="kicker">iRacing Special Events</p>
+        <h2 id="t-saison">Calendrier <em>iRacing</em></h2>
       </div>
     </div>
 
@@ -134,6 +160,68 @@ const twitch = 'https://www.twitch.tv/ascendiatv';
     <p class="mono source">Source : iracing.com/special-events</p>
    </div>
   </section>
+
+  <!-- ================= MANCHE LMU D'ASCENDIA (rouge Ferrari) ================= -->
+  {lmuEngagees.map((e) => (
+    <section class="wrap feature feature-lmu" data-debut={e.ascendia} data-fin={e.ascendia} aria-labelledby={`t-lmu-${e.semaine}`}>
+      {affichesLmu[e.nom] && (
+        <div class="poster reveal">
+          <Image
+            src={affichesLmu[e.nom]}
+            alt={`Affiche Ascendia Racing — ${e.nom}, ${dateLongue(e.ascendia!)}, Le Mans Ultimate`}
+            widths={[480, 800, 1080]}
+            sizes="(max-width: 860px) 100vw, 480px"
+          />
+        </div>
+      )}
+      <div class="feature-body reveal" style="--d:.1s">
+        <p class="statut mono" data-statut><i></i><span>Ascendia engagée</span></p>
+        <h2 id={`t-lmu-${e.semaine}`}>{e.nom}</h2>
+        <p class="feature-date">{dateLongue(e.ascendia!)}</p>
+        <dl class="spec">
+          <div><dt>Circuit</dt><dd>{e.circuit}</dd></div>
+          <div><dt>Catégories</dt><dd>{e.classes}</dd></div>
+          <div><dt>Jeu</dt><dd>Le Mans Ultimate</dd></div>
+          <div><dt>Départ dans</dt><dd class="acc" data-compte>—</dd></div>
+        </dl>
+        <a href={twitch} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          Suivre la course en direct
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
+        </a>
+      </div>
+    </section>
+  ))}
+
+  <!-- ================= CALENDRIER LMU (séparé, rouge Ferrari) ================= -->
+  <section class="wrap section lmu" aria-labelledby="t-lmu">
+    <div class="section-head">
+      <div>
+        <p class="kicker">Le Mans Ultimate</p>
+        <h2 id="t-lmu">Calendrier <em>LMU</em></h2>
+      </div>
+      <p class="mono compte-lmu">{lmu.length} manches · saison 2026</p>
+    </div>
+
+    <ol class="lmu-liste">
+      {lmu.map((e, i) => (
+        <li class="lmu-ev reveal" style={`--d:${i * 0.06}s`} data-debut={e.semaine} data-fin={e.fin}>
+          <div class="lmu-date">
+            <span class="mono">Semaine du</span>
+            <strong>{semaineDu(e.semaine)}</strong>
+          </div>
+          <div class="lmu-info">
+            <p class="lmu-nom">{e.nom}</p>
+            <p class="mono lmu-circuit">{e.circuit}</p>
+          </div>
+          <ul class="lmu-classes">
+            {e.classes.split(',').map((c) => <li class="mono">{c.trim()}</li>)}
+          </ul>
+          <span class="mono lmu-statut" data-statut-lmu></span>
+        </li>
+      ))}
+    </ol>
+    <p class="mono source">Source : calendrier officiel Le Mans Ultimate 2026</p>
+  </section>
 </Base>
 
 <script>
@@ -152,7 +240,20 @@ const twitch = 'https://www.twitch.tv/ascendiatv';
     else { statut.textContent = j <= 7 ? 'Ascendia engagée · ce week-end' : 'Ascendia engagée'; compte.textContent = j === 1 ? 'Demain' : `J-${j}`; }
   });
 
-  // Statut de chaque ligne
+  // Statut des manches LMU (calendrier séparé, non concerné par les filtres iRacing)
+  let prochaineLmu = false;
+  document.querySelectorAll<HTMLElement>('.lmu-ev').forEach((li) => {
+    const debut = jour(li.dataset.debut!), fin = jour(li.dataset.fin!);
+    const s = li.querySelector<HTMLElement>('[data-statut-lmu]')!;
+    if (today > fin) { li.classList.add('passe'); s.textContent = 'Terminé'; }
+    else if (today >= debut) { li.classList.add('en-cours'); s.textContent = 'En cours'; }
+    else {
+      s.textContent = `J-${Math.round((debut.getTime() - today.getTime()) / 864e5)}`;
+      if (!prochaineLmu) { li.classList.add('prochain'); prochaineLmu = true; }
+    }
+  });
+
+  // Statut de chaque ligne iRacing
   const lignes = [...document.querySelectorAll<HTMLElement>('.ev')];
   let prochainTrouve = false;
   lignes.forEach((li) => {
@@ -353,12 +454,79 @@ const twitch = 'https://www.twitch.tv/ascendiatv';
   .ev.ascendia .ev-statut, .ev.prochain .ev-statut, .ev.en-cours .ev-statut { color: var(--accent); }
   .ev.passe { opacity: .45; }
 
+  /* ---------- RACCOURCIS iRacing / LMU ---------- */
+  .jeux-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: clamp(32px, 5vw, 48px); }
+  .jeux-nav a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    text-decoration: none;
+    background: color-mix(in srgb, var(--bg-2) 90%, transparent);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--c);
+    transition: background .25s, transform .25s var(--ease);
+  }
+  .jeux-nav a:hover { background: color-mix(in srgb, var(--c) 14%, var(--bg-2)); transform: translateY(-2px); }
+  .jn-txt { display: flex; flex: 1; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .jeux-nav .mono { color: var(--muted); }
+  .jeux-nav strong { font-family: var(--font-display); font-weight: 900; font-size: 2rem; line-height: 1; text-transform: uppercase; color: var(--c); }
+  .jn-ir { --c: var(--ford); }
+  .jn-lmu { --c: var(--ferrari); }
+
+  /* ---------- MANCHE LMU D'ASCENDIA : même bloc qu'iRacing, en rouge Ferrari ---------- */
+  .feature-lmu { --accent: var(--ferrari); --accent-ink: #fff; }
+  .feature-lmu .btn-primary:hover { background: var(--text); color: var(--bg); }
+  .feature-lmu .poster :global(img) { border-top: 3px solid var(--ferrari); }
+
+  /* ---------- CALENDRIER LMU (rouge Ferrari) ---------- */
+  .lmu { padding-top: clamp(40px, 6vw, 72px); }
+  .lmu .kicker { color: var(--ferrari); }
+  .lmu h2 em { font-style: normal; color: var(--ferrari); }
+  .compte-lmu { color: var(--muted); }
+  .lmu-liste {
+    list-style: none;
+    margin: 0;
+    padding: clamp(12px, 2vw, 20px);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--ferrari);
+    background:
+      radial-gradient(80% 60% at 100% 0%, color-mix(in srgb, var(--ferrari) 14%, transparent), transparent 70%),
+      color-mix(in srgb, var(--bg) 88%, transparent);
+  }
+  .lmu-ev {
+    display: grid;
+    grid-template-columns: 170px 1fr auto 80px;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 12px;
+    border-bottom: 1px solid var(--line);
+    box-shadow: inset 3px 0 0 color-mix(in srgb, var(--ferrari) 55%, transparent);
+    transition: background .2s;
+  }
+  .lmu-ev:last-child { border-bottom: 0; }
+  .lmu-ev:hover { background: color-mix(in srgb, var(--ferrari) 10%, transparent); }
+  .lmu-date { display: flex; flex-direction: column; }
+  .lmu-date .mono { color: var(--muted); font-size: .6rem; }
+  .lmu-date strong { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; text-transform: uppercase; color: var(--ferrari); }
+  .lmu-nom { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.45rem; text-transform: uppercase; line-height: 1.05; }
+  .lmu-circuit { margin: 4px 0 0; color: var(--muted); font-size: .68rem; }
+  .lmu-classes { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+  .lmu-classes li { padding: 4px 8px; font-size: .6rem; color: #ff8a8e; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ferrari) 45%, transparent); }
+  .lmu-statut { text-align: right; color: var(--muted); font-size: .7rem; }
+  .lmu-ev.prochain .lmu-statut, .lmu-ev.en-cours .lmu-statut { color: var(--ferrari); }
+  .lmu-ev.prochain { background: color-mix(in srgb, var(--ferrari) 12%, transparent); box-shadow: inset 3px 0 0 var(--ferrari); }
+  .lmu-ev.passe { opacity: .45; }
+
   .vide { color: var(--muted); padding: 24px 0; }
   .source { color: var(--muted); font-size: .62rem; margin-top: 8px; }
 
   @media (max-width: 1000px) {
     .ev { grid-template-columns: 140px 1fr auto 60px; }
     .ev-classes { display: none; }
+    .lmu-ev { grid-template-columns: 130px 1fr 60px; }
+    .lmu-classes { grid-column: 2; grid-row: 2; }
+    .lmu-statut { grid-column: 3; grid-row: 1; }
   }
   @media (max-width: 860px) {
     .feature { grid-template-columns: 1fr; }
@@ -371,5 +539,11 @@ const twitch = 'https://www.twitch.tv/ascendiatv';
     .ev-info { grid-column: 1 / -1; }
     .tag { grid-column: 1 / -1; }
     .spec { grid-template-columns: 1fr; }
+    .jeux-nav strong { font-size: 1.5rem; }
+    .lmu-ev { grid-template-columns: 1fr auto; gap: 6px 12px; padding: 14px 8px; }
+    .lmu-date { flex-direction: row; align-items: baseline; gap: 8px; grid-column: 1; }
+    .lmu-date strong { font-size: 1.1rem; }
+    .lmu-statut { grid-column: 2; grid-row: 1; }
+    .lmu-info, .lmu-classes { grid-column: 1 / -1; grid-row: auto; }
   }
 </style>
