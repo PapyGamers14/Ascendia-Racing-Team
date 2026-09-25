@@ -1,6 +1,7 @@
 ---
 import Logo from './Logo.astro';
 import Social from './Social.astro';
+import MentionsLegales from './MentionsLegales.astro';
 const annee = new Date().getFullYear();
 ---
 <footer class="footer">
@@ -9,6 +10,7 @@ const annee = new Date().getFullYear();
       <div>
         <Logo size={40} />
         <p class="tag">Team d'endurance virtuelle · iRacing</p>
+        <MentionsLegales />
       </div>
       <nav aria-label="Pied de page">
         <p class="mono label">Navigation</p>
@@ -16,11 +18,16 @@ const annee = new Date().getFullYear();
         <a href="/resultats">Résultats</a>
         <a href="/streams">Streams</a>
         <a href="/calendrier">Calendrier</a>
+        <a href="/recrutement">Recrutement</a>
         <a href="/#reseaux">Nos réseaux</a>
       </nav>
       <div>
         <p class="mono label">Suivre la team</p>
         <Social />
+        <a href="mailto:ascendia.racing@gmail.com" class="mail">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+          ascendia.racing@gmail.com
+        </a>
       </div>
     </div>
     <div class="legal mono">
@@ -43,9 +50,13 @@ const annee = new Date().getFullYear();
   }
   .tag { color: var(--muted); max-width: 32ch; margin-top: 16px; }
   .label { color: var(--muted); margin: 0 0 14px; }
-  nav { display: flex; flex-direction: column; gap: 6px; }
+  /* liens de navigation sur deux colonnes (le titre « Navigation » prend toute la largeur) */
+  nav { display: grid; grid-template-columns: repeat(2, max-content); column-gap: 40px; row-gap: 6px; align-content: start; }
+  nav .label { grid-column: 1 / -1; }
   nav a { text-decoration: none; transition: color .2s; }
   nav a:hover { color: var(--accent); }
+  .mail { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; color: var(--muted); text-decoration: none; transition: color .2s; }
+  .mail:hover { color: var(--accent); }
   .legal {
     display: flex;
     justify-content: space-between;

@@ -1,7 +1,7 @@
 ﻿import type { ImageMetadata } from 'astro';
 import type { Pays } from './pays';
 
-// Membres de la team (source : tableau site-pilote (1).xlsx, mis à jour le 25/09/2026).
+// Membres de la team (source : tableau site-pilote.xlsx, mis à jour le 25/09/2026).
 // Pour ajouter quelqu'un : ajoute une ligne dans son groupe (avec son `pays`).
 //
 // PORTRAITS — entièrement automatiques :
@@ -79,36 +79,36 @@ const tous: Membre[] = [
 
   // ---------- Pilotes compétition ----------
   ...pilotes('competition', 'Pilote', [
-    ['Christophe', 'Vannobel', 'FR'], ['François', 'Lambrecq', 'FR'], ['Alain', 'Berstchy', 'CH'],
-    ['Kevin', 'Aernoudt', 'BE'], ['Yohan', 'Van den Bosch', 'BE', irLmu], ['Otch', 'Massari', 'MA'],
-    ['Eddy', 'Velez', 'FR'], ['Julien', 'Castro', 'FR'], ['Jérôme', 'Zaracki', 'FR'],
-    ['Ulrich', 'Jacoby', 'BE'], ['Julien', 'Araujo Costa', 'BE'], ['Lukas', 'Da Rocha', 'FR'],
-    ['Felipe', 'Allongue', 'BE'],
+    ['Jérôme', 'Zaracki', 'FR'], ['Christopher', 'Salingros', 'BE'], ['Christophe', 'Vannobel', 'FR'],
+    ['François', 'Lambrecq', 'FR'], ['Alain', 'Berstchy', 'CH'], ['Thomas', 'Doyen', 'BE'],
+    ['Kevin', 'Aernoudt', 'BE'], ['Yohan', 'Van den Bosch', 'BE', irLmu], ['Matthieu', 'Desirant', 'BE'],
+    ['Ulrich', 'Jacoby', 'BE'], ['Julien', 'Araujo Costa', 'BE'], ['Otch', 'Massari', 'MA'],
+    ['Nicolas', 'Rumen', 'FR'], ['Felipe', 'Allongue', 'BE'], ['Kevin', 'Castiau', 'BE'],
+    ['Eddy', 'Velez', 'FR'], ['Gabriel', 'Moya Defargues', 'FR'], ['Julien', 'Castro', 'FR'],
+    ['Jules', 'Castro', 'FR'],
     ['Nicolas', 'Rigobert', 'FR', lmu], ['Mickael', 'Nakazuma', 'BE', lmu],
     ['Pierre', 'Matzinger', 'FR', lmu], ['Florent', 'Montador', 'FR', lmu],
   ]),
 
   // ---------- Pilotes Academy ----------
   ...pilotes('academie', 'Pilote Academy', [
-    ['Christopher', 'Salingros', 'BE'], ['Nolhan', 'Verhaegen', 'BE'], ['Cyril', 'Bonnemain', 'FR'],
-    ['François', 'Mahé', 'FR'], ['Thomas', 'Doyen', 'BE'], ['Théo', 'Nardini', 'FR', irLmu],
-    ['Baptiste', 'Jelu', 'FR'], ['Arthur', 'Capelle', 'FR'], ['Adrien', 'Boccadoro', 'FR'],
-    ['Joseph', 'Assez', 'BE', irLmu], ['Cédric', 'Baligant', 'BE'], ['Bruno', 'Marchica', 'BE'],
-    ['Damien', 'Rivet', 'FR'], ['Evan', 'Bazin', 'FR'], ['Geoffrey', 'Lacroix', 'BE', irLmu],
+    ['Nolhan', 'Verhaegen', 'BE'], ['Cyril', 'Bonnemain', 'FR'], ['Damien', 'Rivet', 'FR'],
+    ['François', 'Mahé', 'FR'], ['Evan', 'Mainguy', 'FR'], ['Théo', 'Nardini', 'FR', irLmu],
+    ['Dror', 'Eini', 'IL'], ['Lukas', 'Da Rocha', 'FR'], ['Alexandre', 'Davin', 'BE'],
+    ['Clément-Jérémy', 'Caroujel', 'FR'], ['William', 'Lejuste', 'BE'], ['Evan', 'Bazin', 'FR'],
+    ['Arthur', 'Capelle', 'FR'], ['Adrien', 'Boccadoro', 'FR'], ['Jimmy', 'Janicot', 'FR'],
+    ['Rudy', 'Pereira', 'FR'], ['Joseph', 'Assez', 'BE', irLmu], ['Cédric', 'Baligant', 'BE'],
+    ['Michael', 'Wieczorek', 'FR'], ['Bruno', 'Marchica', 'BE'],
     ['Davy', 'Retfirg', 'FR', lmu], ['Ulrich', 'Betemps', 'FR', lmu], ['Matys', 'Dumange', 'FR', lmu],
-    ['Vivien', 'Pochon', 'FR', lmu], ['Sébastien', 'Bonnier', 'FR', lmu], ['Tom', 'Remeuf', 'FR', lmu],
-    ['Xavier', 'Kulej', 'FR', lmu], ['Kevin', 'Souyri', 'FR', lmu], ['Pierre', 'Le Marchand', 'FR', lmu],
+    ['Vivien', 'Pochon', 'FR', lmu], ['Sébastien', 'Bonnier', 'FR', lmu], ['Geoffrey', 'Lacroix', 'BE', lmu],
+    ['Tom', 'Remeuf', 'FR', lmu], ['Xavier', 'Kulej', 'FR', lmu], ['Kevin', 'Souyri', 'FR', lmu],
+    ['Pierre', 'Le Marchand', 'FR', lmu],
   ]),
 
-  // ---------- Pilotes du club (sans groupe dans le tableau) ----------
-  ...pilotes('club', 'Pilote', [
-    ['Evan', 'Mainguy', 'FR'], ['Killian', 'Marie', 'FR'], ['Matthieu', 'Desirant', 'BE'],
-    ['Dror', 'Eini', 'IL'], ['Nicolas', 'Rumen', 'FR'], ['Donovan', 'Lambrecq', 'FR'],
-    ['Christian', 'Sallendre', 'BE'], ['Alexandre', 'Davin', 'BE'], ['Clément-Jérémy', 'Caroujel', 'FR'],
-    ['Kevin', 'Castiau', 'BE'], ['William', 'Lejuste', 'BE'], ['Jimmy', 'Janicot', 'FR'],
-    ['Rudy', 'Pereira', 'FR'], ['Jérémy', 'Gorré', 'BE'], ['Gabriel', 'Moya Defargues', 'FR'],
-    ['Michael', 'Wieczorek', 'FR'],
-  ]),
+  // ---------- Pilotes du club ----------
+  // (vide : le tableau du 25/09/2026 classe tout le monde en compétition ou Academy ;
+  //  la section réapparaît dès qu'on ajoute quelqu'un ici)
+  ...pilotes('club', 'Pilote', []),
 ];
 
 // tri alphabétique par nom dans chaque groupe (fondateurs et administrateurs gardent leur ordre)
