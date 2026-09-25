@@ -10,6 +10,8 @@
   --accent-2: #b4eef2;      /* bleu glace */
   --accent-ink: #04161d;    /* texte posé sur l'accent */
   --petrol: #0f4454;        /* pétrole des livrées */
+  --ford: #2f6fd6;          /* bleu Ford (éclairci pour rester lisible sur fond sombre) → iRacing */
+  --ferrari: #e5242a;       /* rouge Ferrari (Rosso Corsa éclairci pour la lisibilité) → LMU */
 
   /* Fond pétrole très sombre et textes */
   --bg: #061117;

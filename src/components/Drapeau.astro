@@ -8,7 +8,9 @@ const d = drapeaux[pays];
 ---
 <svg class="drapeau" width={taille} height={Math.round(taille * 2 / 3)} viewBox="0 0 3 2" role="img" aria-label={d.nom}>
   <title>{d.nom}</title>
-  {d.bandes.map((c, i) => <rect x={i} width="1" height="2" fill={c} />)}
+  {'bandes' in d
+    ? d.bandes.map((c, i) => <rect x={i} width="1" height="2" fill={c} />)
+    : <Fragment set:html={d.dessin} />}
 </svg>
 
 <style>
