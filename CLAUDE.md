@@ -48,14 +48,30 @@ l'utilisateur partage directement les affiches de résultats. Pour chacune :
 - copier l'affiche dans `src/assets/resultats/` (nom : `course-equipage.webp`) ;
 - l'ajouter dans `src/data/resultats.ts`, dans la course concernée (ou créer la course) :
   équipage, position, split, voiture, catégorie, pilotes + pays si l'affiche les nomme ;
+- les podiums (P1 à P3) ajoutés ici apparaissent **automatiquement** dans le Palmarès (rien à faire) ;
+  course LMU : mettre `jeu: 'LMU'` sur la course (iRacing par défaut) ;
 - ne garder que les **3 dernières courses** : quand une nouvelle course est ajoutée, supprimer
-  la plus ancienne de `resultats.ts` ET ses affiches dans `src/assets/resultats/`
+  la plus ancienne de `resultats.ts` ET ses affiches dans `src/assets/resultats/`.
+  **AVANT de la supprimer, archiver ses podiums dans le Palmarès** : copier l'affiche de chaque
+  équipage P1–P3 dans `src/assets/palmares/` et ajouter la ligne correspondante dans `palmares.ts`
+  (avec `annee`), sinon le podium disparaîtrait du Palmarès
   (la page coupe aussi automatiquement à 3 courses, constante `NB_COURSES`) ;
 - course en **solo** (pas d'équipage sur l'affiche) : laisser `equipe` vide et mettre le pilote
   dans `pilotes` (il sert alors de titre de carte, avec son drapeau) ; abandon : `position: 'DNF'` ;
   mention type « Course de consolation » : champ `note` de la course ;
 - ne PAS saisir les numéros de voiture (fictifs) ; les noms des pilotes ne sont pas affichés
   sur la carte (déjà sur l'affiche) mais restent dans les données pour le texte alternatif.
+
+## Palmarès
+
+Page `/palmares` (victoires et podiums, gardés sur la durée — contrairement à la page Résultats limitée
+aux 3 dernières courses). Données dans `src/data/palmares.ts`, affiches dans `src/assets/palmares/`.
+Pour un nouveau trophée : copier l'affiche, l'importer, ajouter une ligne (`course`, `jeu` iRacing/LMU,
+`equipe`, `position`, `split`, `pilotes`). La page classe automatiquement (victoires puis podiums) et
+recalcule les chiffres. Affiche avec plusieurs équipages (ex. Daytona) : champ `resultats`.
+**Ne garder que les podiums (P1 à P3)** : ignorer les autres classements et les abandons.
+Sans affiche (résultat donné en texte) : omettre `affiche` → visuel aux couleurs du jeu.
+`annee` : à renseigner si l'affiche ou l'utilisateur la donne ; sinon la course compte pour 2026 (défaut).
 
 ## Documentation
 

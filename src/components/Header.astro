@@ -1,4 +1,4 @@
-﻿---
+---
 import Logo from './Logo.astro';
 import Social from './Social.astro';
 import { siDiscord } from 'simple-icons';
@@ -10,6 +10,7 @@ const liens = [
   { href: '/', label: 'Accueil' },
   { href: '/team', label: 'Team' },
   { href: '/resultats', label: 'Résultats' },
+  { href: '/palmares', label: 'Palmarès' },
   { href: '/streams', label: 'Streams' },
   { href: '/calendrier', label: 'Calendrier' },
   { href: '/recrutement', label: 'Recrutement' },
@@ -72,8 +73,8 @@ const actuel = Astro.url.pathname.replace(/\/$/, '') || '/';
   .bar { display: flex; align-items: center; justify-content: space-between; height: 76px; }
   .brand { text-decoration: none; }
 
-  .menu { display: flex; align-items: center; gap: 36px; }
-  .menu ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+  .menu { display: flex; align-items: center; gap: clamp(20px, 2.2vw, 36px); }
+  .menu ul { display: flex; gap: clamp(16px, 1.6vw, 28px); list-style: none; margin: 0; padding: 0; }
   .menu ul a {
     position: relative;
     display: flex;
@@ -109,7 +110,7 @@ const actuel = Astro.url.pathname.replace(/\/$/, '') || '/';
 
   .burger { display: none; }
 
-  @media (max-width: 1080px) {
+  @media (max-width: 1180px) {
     .burger {
       display: grid;
       gap: 7px;

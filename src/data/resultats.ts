@@ -1,4 +1,4 @@
-﻿import type { ImageMetadata } from 'astro';
+import type { ImageMetadata } from 'astro';
 import type { Pays } from './pays';
 
 import ifrnWuilmus from '../assets/resultats/ifrn-chicagoland-wuilmus.webp';
@@ -30,6 +30,7 @@ export interface Equipage {
 
 export interface Course {
   nom: string;
+  jeu?: 'iRacing' | 'LMU'; // iRacing par défaut (sert au palmarès)
   serie?: string;        // ex. "Global Endurance Series"
   note?: string;         // ex. "Course de consolation"
   debut: string;         // AAAA-MM-JJ

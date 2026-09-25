@@ -1,0 +1,409 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import LogoJeu from '../components/LogoJeu.astro';
+import { Image } from 'astro:assets';
+import { trophees, type Position, type Trophee } from '../data/palmares';
+
+const rang = (p: Position) => (p === 'DNF' ? 99 : p);
+const podium = (p: Position) => (p === 1 ? 'or' : p === 2 ? 'argent' : p === 3 ? 'bronze' : p === 'DNF' ? 'dnf' : '');
+const posTexte = (p: Position) => (p === 'DNF' ? 'DNF' : `P${p}`);
+const nomJeu = { iRacing: 'iRacing', LMU: 'Le Mans Ultimate' } as const;
+
+// victoires d'abord, puis P2, P3 (l'ordre du fichier est gardé à égalité)
+const tries = trophees.map((t, i) => ({ t, i })).sort((a, b) => rang(a.t.position) - rang(b.t.position) || a.i - b.i).map(({ t }) => t);
+// années présentes (les plus récentes d'abord) pour le filtre
+const annees = [...new Set(trophees.map((t) => t.annee).filter((a): a is number => !!a))].sort((a, b) => b - a);
+
+// chaque équipage classé compte (Daytona : plusieurs podiums sur une même affiche)
+const classements = trophees.flatMap((t) => (t.resultats ? t.resultats.map((r) => r.position) : [t.position]).map((p) => ({ p, jeu: t.jeu })));
+const surPodium = classements.filter(({ p }) => typeof p === 'number' && p <= 3);
+const chiffres = [
+  { valeur: classements.filter(({ p }) => p === 1).length, label: 'Victoires' },
+  { valeur: surPodium.length, label: 'Podiums' },
+  { valeur: surPodium.filter((c) => c.jeu === 'iRacing').length, label: 'Podiums iRacing', jeu: 'ir' },
+  { valeur: surPodium.filter((c) => c.jeu === 'LMU').length, label: 'Podiums LMU', jeu: 'lmu' },
+];
+
+const titre = (t: Trophee) => (t.equipe ? `Team ${t.equipe}` : t.pilotes?.[0]?.[0] ?? 'Ascendia Racing');
+const alt = (t: Trophee) =>
+  `Affiche ${t.course} (${nomJeu[t.jeu]}) : ${titre(t)}, ${posTexte(t.position)}` +
+  (t.split ? `, split ${t.split}` : '') +
+  (t.resultats ? `. Résultats : ${t.resultats.map((r) => `Team ${r.equipe} ${posTexte(r.position)}`).join(', ')}` : '') +
+  (t.pilotes && t.equipe ? `, pilotes ${t.pilotes.map(([n]) => n).join(', ')}` : '');
+
+// une ligne (carrousel) par marche du podium
+const sections = [
+  { id: 'p1', pos: 1, kicker: 'Sur la plus haute marche', titre: 'Nos ', accent: 'victoires' },
+  { id: 'p2', pos: 2, kicker: 'Deuxième marche', titre: 'Nos ', accent: 'P2' },
+  { id: 'p3', pos: 3, kicker: 'Troisième marche', titre: 'Nos ', accent: 'P3' },
+].map((s) => ({ ...s, liste: tries.filter((t) => t.position === s.pos) }));
+---
+<Base title="Palmarès" description="Le palmarès de l'Ascendia Racing Team : victoires et podiums en endurance sur iRacing et Le Mans Ultimate (Le Mans, Spa, Daytona, Sebring, Suzuka, Indianapolis…).">
+  <PageHero
+    index="04"
+    kicker="Victoires & podiums"
+    titre="Notre "
+    accent="palmarès"
+    intro="Du Mans à Daytona, de Sebring à Suzuka : les courses où les équipages Ascendia sont montés sur le podium."
+  />
+
+  <section class="wrap palmares" aria-label="Palmarès">
+    <ul class="chiffres">
+      {chiffres.map((c) => (
+        <li class:list={[c.jeu && `c-${c.jeu}`]}><strong>{c.valeur}</strong><span class="mono">{c.label}</span></li>
+      ))}
+    </ul>
+
+    <div class="filtres">
+      <div class="filters" role="group" aria-label="Filtrer par jeu" data-groupe-filtre="jeu">
+        <button class="mono" data-valeur="tous" aria-pressed="true">Tous les jeux</button>
+        <button class="mono f-ir" data-valeur="iRacing" aria-pressed="false"><LogoJeu jeu="iRacing" taille={16} /> iRacing</button>
+        <button class="mono f-lmu" data-valeur="LMU" aria-pressed="false"><LogoJeu jeu="LMU" taille={16} /> Le Mans Ultimate</button>
+      </div>
+      <div class="filters" role="group" aria-label="Filtrer par année" data-groupe-filtre="annee">
+        <button class="mono" data-valeur="tous" aria-pressed="true">Toutes les années</button>
+        {annees.map((a) => <button class="mono" data-valeur={String(a)} aria-pressed="false">{a}</button>)}
+      </div>
+    </div>
+    <p class="mono aucun" hidden>Aucun podium pour ces filtres.</p>
+
+    {sections.map((s) => (
+      <section class="groupe" aria-labelledby={`t-${s.id}`} data-groupe>
+        <div class="groupe-head">
+          <div>
+            <p class="kicker">{s.kicker}</p>
+            <h2 id={`t-${s.id}`}>{s.titre}<em class={`em-${s.id}`}>{s.accent}</em> <span class="mono nb" data-nb>{s.liste.length}</span></h2>
+          </div>
+          <div class="nav-rail">
+            <button type="button" class="fleche" data-rail="-1" aria-label={`Précédent : ${s.titre}${s.accent}`}>
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" /></svg>
+            </button>
+            <button type="button" class="fleche" data-rail="1" aria-label={`Suivant : ${s.titre}${s.accent}`}>
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" /></svg>
+            </button>
+          </div>
+        </div>
+        <ul class="rail">
+          {s.liste.map((t, i) => (
+            <li class:list={['carte', 'reveal', podium(t.position), t.jeu === 'LMU' ? 'jeu-lmu' : 'jeu-ir']} style={`--d:${Math.min(i, 4) * 0.06}s`} data-jeu={t.jeu} data-annee={t.annee ?? ''}>
+              {t.affiche ? (
+                <button type="button" class="affiche" data-zoom aria-label={`Agrandir l'affiche : ${t.course}`}>
+                  <Image src={t.affiche} alt={alt(t)} widths={[400, 700, 1000]} sizes="(max-width: 700px) 100vw, 340px" />
+                </button>
+              ) : (
+                /* pas d'affiche : visuel aux couleurs du jeu */
+                <div class="affiche sans-affiche" aria-hidden="true">
+                  <LogoJeu jeu={t.jeu} taille={44} />
+                  <span class="sa-pos">{posTexte(t.position)}</span>
+                  <span class="sa-course">{t.course}</span>
+                  {t.annee && <span class="mono sa-annee">{t.annee}</span>}
+                </div>
+              )}
+              <div class="infos">
+                <p class="jeu mono"><LogoJeu jeu={t.jeu} taille={16} /> {nomJeu[t.jeu]}{t.annee && <span class="annee"> · {t.annee}</span>}</p>
+                <h3>{t.course}</h3>
+                <div class="ligne">
+                  <strong class="pos">{posTexte(t.position)}</strong>
+                  <span class="qui">
+                    <span class="equipe">{t.resultats ? 'Meilleur résultat' : titre(t)}</span>
+                    {t.split && <span class="mono split">Split {t.split}</span>}
+                    {t.voiture && <span class="mono voiture">{t.voiture}</span>}
+                  </span>
+                </div>
+                {t.resultats && (
+                  <ul class="multi">
+                    {t.resultats.map((r) => (
+                      <li class={podium(r.position)}>
+                        <span>Team {r.equipe}{r.split && <span class="mono"> · split {r.split}</span>}</span>
+                        <b>{posTexte(r.position)}</b>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </section>
+
+  <!-- affiche en grand (fenêtre accessible : Échap ou clic à côté pour fermer) -->
+  <dialog class="zoom" aria-label="Affiche en grand">
+    <button type="button" class="zoom-fermer" aria-label="Fermer">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2.4" fill="none" /></svg>
+    </button>
+    <img alt="" />
+  </dialog>
+</Base>
+
+<script>
+  // ---------- Carrousels : flèches précédent / suivant ----------
+  const majFleches = (rail: HTMLElement) => {
+    const groupe = rail.closest('[data-groupe]')!;
+    const [prec, suiv] = groupe.querySelectorAll<HTMLButtonElement>('[data-rail]');
+    const fin = rail.scrollWidth - rail.clientWidth;
+    prec.disabled = rail.scrollLeft <= 2;
+    suiv.disabled = rail.scrollLeft >= fin - 2;
+    // flèches inutiles si tout tient sur la ligne
+    groupe.querySelector<HTMLElement>('.nav-rail')!.hidden = fin <= 2;
+  };
+  document.querySelectorAll<HTMLElement>('.rail').forEach((rail) => {
+    rail.closest('[data-groupe]')!.querySelectorAll<HTMLButtonElement>('[data-rail]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const carte = rail.querySelector<HTMLElement>('.carte:not([hidden])');
+        const pas = carte ? carte.offsetWidth + 18 : rail.clientWidth;
+        // avance d'autant de cartes qu'il en tient à l'écran
+        rail.scrollBy({ left: Number(b.dataset.rail) * pas * Math.max(1, Math.floor(rail.clientWidth / pas)), behavior: 'smooth' });
+      }),
+    );
+    rail.addEventListener('scroll', () => majFleches(rail), { passive: true });
+    majFleches(rail);
+  });
+  addEventListener('resize', () => document.querySelectorAll<HTMLElement>('.rail').forEach(majFleches));
+
+  // ---------- Filtres (jeu + année, combinables) ----------
+  const filtres: Record<string, string> = { jeu: 'tous', annee: 'tous' };
+  const appliquer = () => {
+    document.querySelectorAll<HTMLElement>('.carte').forEach((c) => {
+      c.hidden =
+        (filtres.jeu !== 'tous' && c.dataset.jeu !== filtres.jeu) ||
+        (filtres.annee !== 'tous' && c.dataset.annee !== filtres.annee);
+    });
+    let total = 0;
+    document.querySelectorAll<HTMLElement>('[data-groupe]').forEach((g) => {
+      const n = g.querySelectorAll('.carte:not([hidden])').length;
+      total += n;
+      g.hidden = n === 0; // une ligne sans carte visible est masquée
+      g.querySelector<HTMLElement>('[data-nb]')!.textContent = String(n);
+      const rail = g.querySelector<HTMLElement>('.rail')!;
+      rail.scrollLeft = 0;
+      majFleches(rail);
+    });
+    document.querySelector<HTMLElement>('.aucun')!.hidden = total > 0;
+  };
+  document.querySelectorAll<HTMLElement>('[data-groupe-filtre]').forEach((groupe) => {
+    const boutons = groupe.querySelectorAll<HTMLButtonElement>('button');
+    boutons.forEach((b) =>
+      b.addEventListener('click', () => {
+        filtres[groupe.dataset.groupeFiltre!] = b.dataset.valeur!;
+        boutons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        appliquer();
+      }),
+    );
+  });
+
+  // Affiche en grand
+  const zoom = document.querySelector<HTMLDialogElement>('dialog.zoom')!;
+  const zoomImg = zoom.querySelector('img')!;
+  document.querySelectorAll<HTMLButtonElement>('[data-zoom]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const img = b.querySelector('img')!;
+      zoomImg.src = img.currentSrc || img.src;
+      zoomImg.alt = img.alt;
+      zoom.showModal();
+    }),
+  );
+  zoom.querySelector('.zoom-fermer')!.addEventListener('click', () => zoom.close());
+  zoom.addEventListener('click', (e) => { if (e.target === zoom) zoom.close(); });
+</script>
+
+<style>
+  .palmares { padding-block: clamp(16px, 3vw, 32px) clamp(64px, 8vw, 110px); }
+
+  /* ---------- CHIFFRES ---------- */
+  .chiffres {
+    list-style: none;
+    margin: 0 0 36px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: var(--bg-2);
+    border-top: 3px solid #f2c14e;
+  }
+  .chiffres li { display: flex; flex-direction: column; gap: 6px; padding: 20px 24px; }
+  .chiffres li + li { border-left: 1px solid var(--line); }
+  .chiffres strong { font-family: var(--font-display); font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: .9; color: #f2c14e; }
+  .chiffres li:nth-child(2) strong { color: var(--accent-2); }
+  .chiffres .c-ir strong { color: var(--ford); }
+  .chiffres .c-lmu strong { color: var(--ferrari); }
+  .chiffres .mono { font-size: .66rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+
+  /* ---------- FILTRES ---------- */
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filters button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition: color .2s, background .2s, border-color .2s;
+  }
+  .filters button:hover { color: var(--text); border-color: var(--text); }
+  .filters button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .filters .f-ir[aria-pressed="true"] { background: var(--ford); border-color: var(--ford); color: #fff; }
+  .filters .f-lmu[aria-pressed="true"] { background: var(--ferrari); border-color: var(--ferrari); color: #fff; }
+
+  /* ---------- SECTIONS ---------- */
+  .groupe { margin-top: clamp(48px, 7vw, 80px); }
+  .groupe[hidden], .carte[hidden] { display: none; }
+  .groupe-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .groupe-head h2 { font-size: clamp(2.4rem, 6vw, 4.4rem); }
+  .groupe-head em { font-style: normal; }
+  .em-p1 { color: #f2c14e; }
+  .em-p2 { color: #c9d6dc; }
+  .em-p3 { color: #d08a4f; }
+  .nb { font-size: .9rem; color: var(--muted); vertical-align: super; letter-spacing: 0; }
+
+  /* ---------- FILTRES (jeu + année) ---------- */
+  .filtres { display: flex; flex-wrap: wrap; gap: 12px 28px; }
+  .aucun { margin: 48px 0 0; color: var(--muted); }
+  .aucun[hidden] { display: none; }
+
+  /* ---------- CARROUSEL : une seule ligne qui défile ---------- */
+  .nav-rail { display: flex; gap: 8px; flex: none; }
+  .nav-rail[hidden] { display: none; }
+  .fleche {
+    all: unset;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px var(--line);
+    transition: background .2s, color .2s, opacity .2s;
+  }
+  .fleche:hover:not(:disabled) { background: var(--accent); color: var(--accent-ink); }
+  .fleche:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .fleche:disabled { opacity: .3; cursor: default; }
+  .rail {
+    list-style: none;
+    margin: 0;
+    padding: 4px 0 14px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: clamp(250px, calc((100% - 54px) / 4), 320px);
+    gap: 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .rail > .carte { scroll-snap-align: start; }
+  @media (prefers-reduced-motion: reduce) { .rail { scroll-behavior: auto; } }
+
+  /* ---------- CARTES ---------- */
+  .carte {
+    --pos: var(--line);
+    display: flex;
+    flex-direction: column;
+    background: color-mix(in srgb, var(--bg-2) 90%, transparent);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--pos);
+    overflow: hidden;
+    transition: transform .3s var(--ease), border-color .3s;
+  }
+  .carte:hover { transform: translateY(-4px); border-color: var(--pos); }
+  .carte.or { --pos: #f2c14e; }
+  .carte.argent { --pos: #c9d6dc; }
+  .carte.bronze { --pos: #d08a4f; }
+  .jeu-ir { --jeu: var(--ford); }
+  .jeu-lmu { --jeu: var(--ferrari); }
+
+  .affiche {
+    all: unset;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    cursor: zoom-in;
+    background: var(--bg-3);
+  }
+  .affiche:focus-visible { outline: 2px solid var(--pos); outline-offset: -4px; }
+  /* affiche entière (les affiches en paysage ne sont pas rognées) */
+  .affiche :global(img) { width: 100%; height: 100%; object-fit: contain; transition: transform .6s var(--ease); }
+  .carte:hover .affiche :global(img) { transform: scale(1.04); }
+  .sans-affiche {
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 28px;
+    box-sizing: border-box;
+    background:
+      radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--jeu) 45%, transparent), transparent 60%),
+      repeating-linear-gradient(135deg, transparent 0 18px, color-mix(in srgb, var(--jeu) 10%, transparent) 18px 20px),
+      var(--bg-3);
+  }
+  .sans-affiche :global(img.logo-jeu) { width: auto; height: 44px; object-fit: contain; transform: none; }
+  .sa-pos { font-family: var(--font-display); font-weight: 900; font-size: 6rem; line-height: .8; color: var(--pos); margin-top: 12px; }
+  .sa-course { font-family: var(--font-display); font-weight: 700; font-size: 1.9rem; line-height: 1; text-transform: uppercase; }
+  .sa-annee { color: var(--muted); font-size: .75rem; letter-spacing: .15em; }
+  .annee { color: var(--muted); }
+
+  .infos { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px 20px; flex: 1; }
+  .jeu { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--jeu); font-size: .66rem; text-transform: uppercase; letter-spacing: .1em; }
+  .infos h3 { margin: 0; font-size: 1.45rem; line-height: 1.05; text-transform: uppercase; }
+  .ligne { display: flex; align-items: center; gap: 14px; }
+  .pos { font-family: var(--font-display); font-weight: 900; font-size: 3.2rem; line-height: .85; color: var(--pos); }
+  .qui { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .equipe { font-weight: 600; }
+  .split, .voiture { font-size: .64rem; color: var(--muted); }
+
+  .multi { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
+  .multi li { --pos: var(--muted); display: flex; justify-content: space-between; gap: 8px; padding: 6px 10px; background: var(--bg-3); font-size: .85rem; }
+  .multi li.or { --pos: #f2c14e; }
+  .multi li.argent { --pos: #c9d6dc; }
+  .multi li.bronze { --pos: #d08a4f; }
+  .multi li.dnf { --pos: #e5484d; }
+  .multi .mono { color: var(--muted); font-size: .66rem; }
+  .multi b { font-family: var(--font-display); color: var(--pos); }
+
+  /* ---------- AFFICHE EN GRAND ---------- */
+  .zoom {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    max-width: min(92vw, 900px);
+    max-height: 92vh;
+    overflow: visible;
+  }
+  .zoom::backdrop { background: rgba(3, 10, 14, .88); backdrop-filter: blur(4px); }
+  .zoom img { display: block; max-width: min(92vw, 900px); max-height: 92vh; width: auto; height: auto; }
+  .zoom-fermer {
+    all: unset;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    background: rgba(3, 10, 14, .75);
+    color: #fff;
+    cursor: pointer;
+  }
+  .zoom-fermer:hover { background: var(--accent); color: var(--accent-ink); }
+  .zoom-fermer:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  @media (max-width: 760px) {
+    .chiffres { grid-template-columns: repeat(2, 1fr); }
+    .chiffres li:nth-child(3) { border-left: 0; }
+    .chiffres li:nth-child(n + 3) { border-top: 1px solid var(--line); }
+  }
+</style>
