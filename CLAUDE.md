@@ -22,6 +22,14 @@ catégories (Supercars, Sprint Car, Dirt, FF1600, Super Formula Lights, Touring 
 Les courses sur Dallara IR-18 s'écrivent `IndyCar (Dallara IR-18)` pour être reconnues.
 Le filtre dans `courses.ts` applique aussi cette règle automatiquement.
 
+**Calendrier LMU (Le Mans Ultimate)** : liste SÉPARÉE `evenementsLmu` dans `courses.ts`, à ne jamais
+mélanger avec les événements iRacing. Affichée en rouge Ferrari dans sa propre section de la page
+Calendrier. Toutes ses catégories sont gardées (pas de filtre `CATEGORIES_SUIVIES`). Dates données
+par semaine (« w/c » = lundi de la semaine de course) → champ `semaine`.
+Manche LMU où Ascendia est engagée : ajouter `ascendia: 'AAAA-MM-JJ'` (date exacte de la course) et
+déposer l'affiche dans `src/assets/`, puis l'associer au nom de la manche dans `affichesLmu`
+(`calendrier.astro`) → bloc rouge mis en avant au-dessus du calendrier LMU.
+
 ## Membres et portraits (page Team)
 
 Les membres sont dans `src/data/team.ts` (groupe, rôle, pays). Le drapeau du `pays` est posé
