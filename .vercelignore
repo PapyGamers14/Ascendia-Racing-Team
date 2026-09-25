@@ -1,0 +1,8 @@
+# Fichiers à ne pas envoyer à Vercel lors d'une mise en ligne
+node_modules
+dist
+.astro
+.env*
+Ascendia
+.venv-portraits
+scripts/__pycache__

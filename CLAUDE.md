@@ -22,6 +22,33 @@ catégories (Supercars, Sprint Car, Dirt, FF1600, Super Formula Lights, Touring 
 Les courses sur Dallara IR-18 s'écrivent `IndyCar (Dallara IR-18)` pour être reconnues.
 Le filtre dans `courses.ts` applique aussi cette règle automatiquement.
 
+## Membres et portraits (page Team)
+
+Les membres sont dans `src/data/team.ts` (groupe, rôle, pays). Le drapeau du `pays` est posé
+automatiquement en fond de chaque portrait par `src/components/PortraitDrapeau.astro` (pas de petit
+drapeau à côté du nom). Pays disponibles dans `src/data/pays.ts` (ajouter une ligne pour un nouveau pays).
+
+Pour un nouveau portrait ou un portrait modifié :
+1. le copier dans `src/assets/team/originaux/` nommé `prenom-nom.webp` (sans accents, en minuscules) ;
+2. lancer `npm run portraits` (détoure automatiquement vers `src/assets/team/detoures/`) ;
+3. rien d'autre : la page retrouve le portrait par le nom. Sans portrait → avatar casqué (`detoures/avatar.webp`).
+
+## Mise à jour des résultats
+
+Les résultats ne sont PAS récupérés automatiquement depuis Instagram (choix de l'utilisateur) :
+l'utilisateur partage directement les affiches de résultats. Pour chacune :
+- copier l'affiche dans `src/assets/resultats/` (nom : `course-equipage.webp`) ;
+- l'ajouter dans `src/data/resultats.ts`, dans la course concernée (ou créer la course) :
+  équipage, position, split, voiture, catégorie, pilotes + pays si l'affiche les nomme ;
+- ne garder que les **3 dernières courses** : quand une nouvelle course est ajoutée, supprimer
+  la plus ancienne de `resultats.ts` ET ses affiches dans `src/assets/resultats/`
+  (la page coupe aussi automatiquement à 3 courses, constante `NB_COURSES`) ;
+- course en **solo** (pas d'équipage sur l'affiche) : laisser `equipe` vide et mettre le pilote
+  dans `pilotes` (il sert alors de titre de carte, avec son drapeau) ; abandon : `position: 'DNF'` ;
+  mention type « Course de consolation » : champ `note` de la course ;
+- ne PAS saisir les numéros de voiture (fictifs) ; les noms des pilotes ne sont pas affichés
+  sur la carte (déjà sur l'affiche) mais restent dans les données pour le texte alternatif.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
