@@ -85,7 +85,7 @@ const tous: Membre[] = [
     ['Ulrich', 'Jacoby', 'BE'], ['Julien', 'Araujo Costa', 'BE'], ['Otch', 'Massari', 'MA'],
     ['Nicolas', 'Rumen', 'FR'], ['Felipe', 'Allongue', 'BE'], ['Kevin', 'Castiau', 'BE'],
     ['Eddy', 'Velez', 'FR'], ['Gabriel', 'Moya Defargues', 'FR'], ['Julien', 'Castro', 'FR'],
-    ['Jules', 'Castro', 'FR'],
+    ['Jules', 'Castro', 'FR'], ['Louan', 'Boishardy', 'FR'],
     ['Nicolas', 'Rigobert', 'FR', lmu], ['Mickael', 'Nakazuma', 'BE', lmu],
     ['Pierre', 'Matzinger', 'FR', lmu], ['Florent', 'Montador', 'FR', lmu],
   ]),
