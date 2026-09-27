@@ -3,9 +3,11 @@ import type { Pays } from './pays';
 
 import ifrnWuilmus from '../assets/resultats/ifrn-chicagoland-wuilmus.webp';
 import ifrnBaligant from '../assets/resultats/ifrn-chicagoland-baligant.webp';
-import leMansAstra from '../assets/resultats/le-mans-24h-astra.webp';
-import leMansAcademy2 from '../assets/resultats/le-mans-24h-academy-2.webp';
-import leMansBlaze from '../assets/resultats/le-mans-24h-blaze.webp';
+import plmDark from '../assets/resultats/petit-le-mans-dark.webp';
+import plmAcademy1 from '../assets/resultats/petit-le-mans-academy-1.webp';
+import plmAstra from '../assets/resultats/petit-le-mans-astra.webp';
+import plmComete from '../assets/resultats/petit-le-mans-comete.webp';
+import plmBlaze from '../assets/resultats/petit-le-mans-blaze.webp';
 import suzukaBlaze from '../assets/resultats/suzuka-1000-blaze.webp';
 import suzukaAstra from '../assets/resultats/suzuka-1000-astra.webp';
 import suzukaComete from '../assets/resultats/suzuka-1000-comete.webp';
@@ -41,6 +43,21 @@ export interface Course {
 
 export const courses: Course[] = [
   {
+    nom: 'Petit Le Mans', serie: 'iRacing Special Event', debut: '2026-09-25', fin: '2026-09-27', circuit: 'Michelin Raceway Road Atlanta',
+    equipages: [
+      { equipe: 'Dark', position: 2, split: '20/23', voiture: 'Ferrari 296 GT3', categorie: 'GT3', affiche: plmDark,
+        pilotes: [{ nom: 'François Lambrecq', pays: 'FR' }, { nom: 'Jérôme Zaracki', pays: 'FR' }, { nom: 'Alain Bertschy', pays: 'CH' }] },
+      { equipe: 'Academy 1', position: 7, split: '8/9', voiture: 'Porsche 911 GT3 R (992)', categorie: 'GT3', affiche: plmAcademy1,
+        pilotes: [{ nom: 'Damien Wuilmus', pays: 'BE' }, { nom: 'Bruno Marchica', pays: 'BE' }] },
+      { equipe: 'Astra', position: 8, split: '3/10', voiture: 'Aston Martin Valkyrie', categorie: 'GTP', affiche: plmAstra,
+        pilotes: [{ nom: 'Mickael Scherdel', pays: 'FR' }, { nom: 'Julien Castro', pays: 'FR' }, { nom: 'Jules Castro', pays: 'FR' }] },
+      { equipe: 'Comète', position: 'DNF', split: '10/23', voiture: 'McLaren 720S GT3', categorie: 'GT3', affiche: plmComete,
+        pilotes: [{ nom: 'Michel Tonnon', pays: 'BE' }, { nom: 'Elie Tinog', pays: 'FR' }, { nom: 'Otch Massari', pays: 'MA' }] },
+      { equipe: 'Blaze', position: 'DNF', split: '7/9', voiture: 'Aston Martin Valkyrie', categorie: 'GTP', affiche: plmBlaze,
+        pilotes: [{ nom: 'Antoine Barbosa', pays: 'FR' }, { nom: 'Mathéo Manaranche', pays: 'FR' }, { nom: 'Lukas Da Rocha', pays: 'FR' }] },
+    ],
+  },
+  {
     nom: 'I-FRN · Chicagoland', serie: 'Rookie Series · Fall 2026', note: 'Course de consolation',
     debut: '2026-09-17', fin: '2026-09-17', circuit: 'Chicagoland Speedway',
     equipages: [
@@ -59,14 +76,6 @@ export const courses: Course[] = [
         pilotes: [{ nom: 'François Baligant', pays: 'BE' }, { nom: 'Damien Wuilmus', pays: 'BE' }] },
       { equipe: 'Comète', position: 30, split: '5/8', voiture: 'Ferrari 296 GT3', categorie: 'GT3', affiche: suzukaComete,
         pilotes: [{ nom: 'Alexis Darsy', pays: 'FR' }, { nom: 'Eddy Velez', pays: 'FR' }] },
-    ],
-  },
-  {
-    nom: '24 Heures du Mans', serie: 'iRacing', debut: '2026-09-05', fin: '2026-09-06', circuit: 'Circuit des 24 Heures du Mans',
-    equipages: [
-      { equipe: 'Blaze', position: 1, split: '8/15', voiture: 'Porsche 963 GTP', categorie: 'GTP', affiche: leMansBlaze },
-      { equipe: 'Academy 2', position: 3, split: '13/15', voiture: 'Porsche 963 GTP', categorie: 'GTP', affiche: leMansAcademy2 },
-      { equipe: 'Astra', position: 11, split: '4/15', voiture: 'McLaren 720S GT3', categorie: 'GT3', affiche: leMansAstra },
     ],
   },
 ];
