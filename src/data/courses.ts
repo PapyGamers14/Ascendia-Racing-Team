@@ -1,4 +1,4 @@
-﻿// Calendrier des iRacing Special Events 2026 (source : iracing.com/special-events)
+// Calendrier des iRacing Special Events 2026 (source : iracing.com/special-events)
 // Pour signaler qu'Ascendia participe à une course : ajoute `ascendia: true`.
 //
 // Seules les courses d'une des catégories ci-dessous sont affichées sur le site ;
@@ -43,7 +43,7 @@ const tousLesEvenements: Evenement[] = [
   { debut: '2026-09-18', fin: '2026-09-20', nom: 'Britcar 24', circuit: 'Silverstone', classes: 'GT3, GT4', type: 'team' },
   { debut: '2026-09-25', fin: '2026-09-27', nom: 'Petit Le Mans', circuit: 'Michelin Raceway Road Atlanta', classes: 'GTP, LMP2, GT3', type: 'team', ascendia: true },
   { debut: '2026-10-02', fin: '2026-10-04', nom: 'Bathurst 1000', circuit: 'Mount Panorama Circuit', classes: 'Supercars', type: 'team' },
-  { debut: '2026-10-16', fin: '2026-10-18', nom: '8 Hours of Indianapolis', circuit: 'Indianapolis Motor Speedway', classes: 'GT3', type: 'team' },
+  { debut: '2026-10-16', fin: '2026-10-18', nom: '8 Hours of Indianapolis', circuit: 'Indianapolis Motor Speedway', classes: 'GT3', type: 'team', ascendia: true },
   { debut: '2026-10-30', fin: '2026-10-31', nom: 'iRacing FF1600 Festival', circuit: 'Brands Hatch', classes: 'FF1600', type: 'standard' },
   { debut: '2026-11-04', fin: '2026-11-09', nom: 'Homestead Championship', circuit: 'Homestead Miami Speedway', classes: 'NASCAR Cup', type: 'standard' },
   { debut: '2026-11-13', fin: '2026-11-15', nom: 'SFL Mountain Showdown', circuit: 'Mount Panorama Circuit', classes: 'Super Formula Lights', type: 'standard' },

@@ -8,7 +8,9 @@ import { streamers, chaineOfficielle } from '../data/streamers';
 
 // Domaines autorisés à afficher le lecteur Twitch (exigence de Twitch)
 const parents = ['ascendia-racing.vercel.app', 'localhost'];
-const lecteur = `https://player.twitch.tv/?channel=${chaineOfficielle.twitch}&${parents.map((p) => `parent=${p}`).join('&')}&muted=true&autoplay=false`;
+const lecteurDe = (chaine: string) =>
+  `https://player.twitch.tv/?channel=${chaine}&${parents.map((p) => `parent=${p}`).join('&')}&muted=true&autoplay=false`;
+const chaines = chaineOfficielle.twitch;
 
 const nomComplet = (m: (typeof membres)[number]) => [m.prenom, m.nom].filter(Boolean).join(' ');
 const normaliser = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
@@ -47,24 +49,36 @@ const styleCarte = (s: (typeof cartes)[number], i: number) => {
 
   <!-- ================= CHAÎNE OFFICIELLE ================= -->
   <section class="wrap officielle" aria-labelledby="t-officielle">
-    <div class="lecteur reveal">
-      <iframe
-        src={lecteur}
-        title="Lecteur Twitch de la chaîne AscendiaTV"
-        allowfullscreen
-        loading="lazy"
-      ></iframe>
+    <div class="lecteur-bloc reveal">
+      <!-- onglets : une chaîne officielle par onglet ; le lecteur passe tout seul sur celle en direct -->
+      <div class="onglets" role="group" aria-label="Choisir la chaîne à regarder">
+        {chaines.map((c, i) => (
+          <button type="button" class="onglet mono" data-chaine={c.chaine} data-lecteur={lecteurDe(c.chaine)} aria-pressed={i === 0 ? 'true' : 'false'}>
+            <i class="point-live" hidden></i>{c.nom}
+          </button>
+        ))}
+      </div>
+      <div class="lecteur">
+        <iframe
+          src={lecteurDe(chaines[0].chaine)}
+          title={`Lecteur Twitch de la chaîne ${chaines[0].nom}`}
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
     </div>
     <div class="officielle-infos reveal" style="--d:.1s">
-      <p class="kicker">Chaîne officielle</p>
+      <p class="kicker">Chaînes officielles</p>
       <h2 id="t-officielle">Ascendia<em>TV</em></h2>
-      <p class="live mono" data-live={chaineOfficielle.twitch} hidden><i></i>En direct</p>
-      <p class="texte">Les grandes courses de la team en direct : endurance, Special Events et soirées entre pilotes.</p>
+      <p class="live mono" data-live-officiel hidden><i></i><span>En direct</span></p>
+      <p class="texte">Les grandes courses de la team en direct sur nos deux chaînes : quand plusieurs équipages roulent en même temps, chaque chaîne suit sa voiture.</p>
       <div class="boutons">
-        <a class="btn-plateforme" style="--c:#9146ff" href={`https://www.twitch.tv/${chaineOfficielle.twitch}`} target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d={siTwitch.path} fill="currentColor" /></svg>
-          Suivre sur Twitch
-        </a>
+        {chaines.map((c) => (
+          <a class="btn-plateforme" style="--c:#9146ff" href={`https://www.twitch.tv/${c.chaine}`} target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d={siTwitch.path} fill="currentColor" /></svg>
+            {c.nom}
+          </a>
+        ))}
         <a class="btn-plateforme" style="--c:#ff0033" href={chaineOfficielle.youtube} target="_blank" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d={siYoutube.path} fill="currentColor" /></svg>
           YouTube
@@ -142,8 +156,27 @@ const styleCarte = (s: (typeof cartes)[number], i: number) => {
       return false;
     }
   };
-  document.querySelectorAll<HTMLElement>('[data-live]').forEach(async (el) => {
-    if (await estEnLive(el.dataset.live!)) el.hidden = false;
+  // ---------- Chaînes officielles : onglets du lecteur ----------
+  const onglets = [...document.querySelectorAll<HTMLButtonElement>('.onglet')];
+  const iframe = document.querySelector<HTMLIFrameElement>('.lecteur iframe')!;
+  const choisir = (b: HTMLButtonElement) => {
+    onglets.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    if (iframe.src !== b.dataset.lecteur) iframe.src = b.dataset.lecteur!;
+    iframe.title = `Lecteur Twitch de la chaîne ${b.textContent!.trim()}`;
+  };
+  onglets.forEach((b) => b.addEventListener('click', () => choisir(b)));
+
+  // qui est en direct ? point rouge sur l'onglet, et le lecteur passe sur une chaîne en live
+  Promise.all(onglets.map(async (b) => ({ b, live: await estEnLive(b.dataset.chaine!) }))).then((etats) => {
+    const enLive = etats.filter((e) => e.live);
+    enLive.forEach((e) => (e.b.querySelector<HTMLElement>('.point-live')!.hidden = false));
+    const badge = document.querySelector<HTMLElement>('[data-live-officiel]')!;
+    if (enLive.length) {
+      badge.hidden = false;
+      badge.querySelector('span')!.textContent = `En direct sur ${enLive.map((e) => e.b.textContent!.trim()).join(' et ')}`;
+      const actif = onglets.find((b) => b.getAttribute('aria-pressed') === 'true')!;
+      if (!enLive.some((e) => e.b === actif)) choisir(enLive[0].b);
+    }
   });
   document.querySelectorAll<HTMLElement>('.carte[data-twitch]').forEach(async (carte) => {
     if (await estEnLive(carte.dataset.twitch!)) {
@@ -170,6 +203,25 @@ const styleCarte = (s: (typeof cartes)[number], i: number) => {
     box-shadow: 0 30px 60px rgba(0, 0, 0, .45);
   }
   .lecteur iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .lecteur-bloc { min-width: 0; }
+  /* onglets AscendiaTV / AscendiaTV 2 */
+  .onglets { display: flex; gap: 6px; margin-bottom: 8px; }
+  .onglet {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition: color .2s, background .2s, border-color .2s;
+  }
+  .onglet:hover { color: var(--text); border-color: var(--text); }
+  .onglet[aria-pressed="true"] { background: #9146ff; border-color: #9146ff; color: #fff; }
+  .onglet:focus-visible { outline: 2px solid #9146ff; outline-offset: 2px; }
+  .point-live { width: 8px; height: 8px; border-radius: 50%; background: #ff4655; animation: clignote 1.2s infinite; }
+  .point-live[hidden] { display: none; }
   .officielle-infos h2 { font-size: clamp(2.8rem, 6vw, 4.6rem); margin: 14px 0 12px; }
   .officielle-infos h2 em { font-style: normal; color: #9146ff; }
   .texte { color: var(--muted); margin: 12px 0 24px; }
@@ -194,6 +246,7 @@ const styleCarte = (s: (typeof cartes)[number], i: number) => {
   /* indicateur « en direct » */
   .live { display: inline-flex; align-items: center; gap: 8px; margin: 0; color: #ff4655; }
   .live[hidden], .badge-live[hidden] { display: none; }
+  .boutons { flex-wrap: wrap; }
   .live i, .badge-live i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: clignote 1.2s infinite; }
   @keyframes clignote { 50% { opacity: .25; } }
 

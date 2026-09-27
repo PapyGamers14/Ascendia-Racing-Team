@@ -30,6 +30,11 @@ Manche LMU où Ascendia est engagée : ajouter `ascendia: 'AAAA-MM-JJ'` (date ex
 déposer l'affiche dans `src/assets/`, puis l'associer au nom de la manche dans `affichesLmu`
 (`calendrier.astro`) → bloc rouge mis en avant au-dessus du calendrier LMU.
 
+**Course mise en avant (iRacing ou LMU)** : UN SEUL bloc par jeu. Quand l'utilisateur envoie l'affiche
+d'un prochain event, elle **remplace** le bloc précédent (ne s'ajoute pas) : la page affiche
+automatiquement la dernière course engagée (`ascendia`) de chaque jeu. iRacing : mettre `ascendia: true`
+sur l'event dans `courses.ts` et associer l'affiche dans `affiches` (`calendrier.astro`).
+
 ## Membres et portraits (page Team)
 
 Les membres sont dans `src/data/team.ts` (groupe, rôle, pays). Le drapeau du `pays` est posé

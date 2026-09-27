@@ -6,6 +6,7 @@ import PageHero from '../components/PageHero.astro';
 import LogoJeu from '../components/LogoJeu.astro';
 import { evenements, evenementsLmu, finDeSemaine, libelleType, plage, moisLong } from '../data/courses';
 import affichePLM from '../assets/affiche-petit-le-mans.webp';
+import afficheIndy from '../assets/affiche-8h-indianapolis.webp';
 import afficheFuji from '../assets/affiche-lmu-fuji.webp';
 import fondMustang from '../assets/mustang-gt3-fond.webp';
 import fondLumieres from '../assets/fond-lumieres.webp';
@@ -18,9 +19,13 @@ const fondsTableau = [fondMustang, fondLumieres, fondTrio, fondDuo];
 // Affiches des courses où Ascendia est engagée (clé = nom de l'événement)
 const affiches: Record<string, ImageMetadata> = {
   'Petit Le Mans': affichePLM,
+  '8 Hours of Indianapolis': afficheIndy,
 };
 
-const engagees = evenements.filter((e) => e.ascendia);
+// Un seul bloc mis en avant par jeu : la dernière course où Ascendia est engagée (la plus récente
+// dans le calendrier). Ajouter une nouvelle course engagée REMPLACE donc le bloc précédent.
+const derniere = <T,>(liste: T[]) => liste.slice(-1);
+const engagees = derniere(evenements.filter((e) => e.ascendia));
 
 // Regroupement par mois
 const parMois = evenements.reduce<Record<string, typeof evenements>>((acc, e) => {
@@ -37,7 +42,7 @@ const lmu = evenementsLmu.map((e) => ({ ...e, fin: finDeSemaine(e.semaine) }));
 const affichesLmu: Record<string, ImageMetadata> = {
   '6 Hours of Fuji': afficheFuji,
 };
-const lmuEngagees = lmu.filter((e) => e.ascendia);
+const lmuEngagees = derniere(lmu.filter((e) => e.ascendia));
 const dateLongue = (iso: string) =>
   new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 const semaineDu = (iso: string) =>

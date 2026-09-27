@@ -13,9 +13,13 @@ export interface Streamer {
   tiktok?: string;
 }
 
-/** Chaîne officielle de la team, mise en avant en haut de la page */
+/** Chaînes officielles de la team, mises en avant en haut de la page */
 export const chaineOfficielle = {
-  twitch: 'ascendiatv',
+  // chaînes Twitch officielles (la première est affichée par défaut dans le lecteur)
+  twitch: [
+    { chaine: 'ascendiatv', nom: 'AscendiaTV' },
+    { chaine: 'ascendiatv2', nom: 'AscendiaTV 2' },
+  ],
   youtube: 'https://www.youtube.com/@AscendiaRacingTeamTV',
 };
 
