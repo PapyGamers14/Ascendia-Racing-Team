@@ -8,6 +8,7 @@ import { evenements, evenementsLmu, finDeSemaine, libelleType, plage, moisLong }
 import affichePLM from '../assets/affiche-petit-le-mans.webp';
 import afficheIndy from '../assets/affiche-8h-indianapolis.webp';
 import afficheFuji from '../assets/affiche-lmu-fuji.webp';
+import afficheRoadAtlanta from '../assets/affiche-lmu-road-atlanta.webp';
 import fondMustang from '../assets/mustang-gt3-fond.webp';
 import fondLumieres from '../assets/fond-lumieres.webp';
 import fondTrio from '../assets/trio-gt3-963-nascar.webp';
@@ -41,6 +42,7 @@ const lmu = evenementsLmu.map((e) => ({ ...e, fin: finDeSemaine(e.semaine) }));
 // Affiches des manches LMU où Ascendia est engagée (clé = nom de la manche)
 const affichesLmu: Record<string, ImageMetadata> = {
   '6 Hours of Fuji': afficheFuji,
+  '10 Hours of Road Atlanta': afficheRoadAtlanta,
 };
 const lmuEngagees = derniere(lmu.filter((e) => e.ascendia));
 const dateLongue = (iso: string) =>

@@ -8,9 +8,9 @@ import plmAcademy1 from '../assets/resultats/petit-le-mans-academy-1.webp';
 import plmAstra from '../assets/resultats/petit-le-mans-astra.webp';
 import plmComete from '../assets/resultats/petit-le-mans-comete.webp';
 import plmBlaze from '../assets/resultats/petit-le-mans-blaze.webp';
-import suzukaBlaze from '../assets/resultats/suzuka-1000-blaze.webp';
-import suzukaAstra from '../assets/resultats/suzuka-1000-astra.webp';
-import suzukaComete from '../assets/resultats/suzuka-1000-comete.webp';
+import fujiGalaxy from '../assets/resultats/fuji-6h-galaxy.webp';
+import fujiAcademy1 from '../assets/resultats/fuji-6h-academy-1.webp';
+import fujiEclipse from '../assets/resultats/fuji-6h-eclipse.webp';
 
 // Résultats de la team, regroupés par course (de la plus récente à la plus ancienne).
 // Seules les 3 dernières courses sont affichées : quand une nouvelle course arrive,
@@ -43,6 +43,17 @@ export interface Course {
 
 export const courses: Course[] = [
   {
+    nom: '6 Heures de Fuji', jeu: 'LMU', serie: 'Le Mans Ultimate', debut: '2026-10-03', fin: '2026-10-03', circuit: 'Fuji Speedway',
+    equipages: [
+      { equipe: 'Galaxy', position: 2, split: '7/11', voiture: 'Hypercar', categorie: 'Hypercar', affiche: fujiGalaxy,
+        pilotes: [{ nom: 'Antoine Barbosa', pays: 'FR' }, { nom: 'Nicolas Rigobert', pays: 'FR' }] },
+      { equipe: 'Academy 1', position: 3, split: '6/11', voiture: 'McLaren 720S GT3 Evo', categorie: 'LMGT3', affiche: fujiAcademy1,
+        pilotes: [{ nom: 'Vivien Pochon', pays: 'FR' }, { nom: 'Matys Dumange', pays: 'FR' }, { nom: 'Kevin Souyri', pays: 'FR' }] },
+      { equipe: 'Eclipse', position: 7, split: '6/11', voiture: 'Hypercar', categorie: 'Hypercar', affiche: fujiEclipse,
+        pilotes: [{ nom: 'Mickael Nakazuma', pays: 'BE' }, { nom: 'Yohan Van den Bosch', pays: 'BE' }] },
+    ],
+  },
+  {
     nom: 'Petit Le Mans', serie: 'iRacing Special Event', debut: '2026-09-25', fin: '2026-09-27', circuit: 'Michelin Raceway Road Atlanta',
     equipages: [
       { equipe: 'Dark', position: 2, split: '20/23', voiture: 'Ferrari 296 GT3', categorie: 'GT3', affiche: plmDark,
@@ -65,17 +76,6 @@ export const courses: Course[] = [
         pilotes: [{ nom: 'Damien Wuilmus', pays: 'BE' }] },
       { position: 'DNF', voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: ifrnBaligant,
         pilotes: [{ nom: 'François Baligant', pays: 'BE' }] },
-    ],
-  },
-  {
-    nom: 'Suzuka 1000km', serie: 'iRacing Special Event', debut: '2026-09-10', fin: '2026-09-15', circuit: 'Suzuka Circuit',
-    equipages: [
-      { equipe: 'Blaze', position: 1, split: '7/11', voiture: 'Ferrari 296 GT3', categorie: 'GT3', affiche: suzukaBlaze,
-        pilotes: [{ nom: 'Elie Tinog', pays: 'FR' }, { nom: 'Felipe Allongue', pays: 'BE' }] },
-      { equipe: 'Astra', position: 6, split: '6/8', voiture: 'Ford Mustang GT3', categorie: 'GT3', affiche: suzukaAstra,
-        pilotes: [{ nom: 'François Baligant', pays: 'BE' }, { nom: 'Damien Wuilmus', pays: 'BE' }] },
-      { equipe: 'Comète', position: 30, split: '5/8', voiture: 'Ferrari 296 GT3', categorie: 'GT3', affiche: suzukaComete,
-        pilotes: [{ nom: 'Alexis Darsy', pays: 'FR' }, { nom: 'Eddy Velez', pays: 'FR' }] },
     ],
   },
 ];
