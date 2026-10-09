@@ -42,33 +42,11 @@ export interface Trophee {
   affiche?: ImageMetadata;    // sans affiche : la carte affiche un visuel aux couleurs du jeu
 }
 
+// Liste dans l'ordre CHRONOLOGIQUE (la plus ancienne en haut) : un nouveau trophée s'ajoute
+// TOUJOURS EN BAS, il sera alors affiché en premier (le plus récent).
 const liste: Trophee[] = [
-  // ---------- iRacing ----------
-  { course: '24 Heures du Mans', jeu: 'iRacing', equipe: 'Blaze', position: 1, split: '8/15', annee: 2026, affiche: leMansBlaze },
-  { course: 'Suzuka 1000 km', jeu: 'iRacing', equipe: 'Blaze', position: 1, split: '7/11', voiture: 'Ferrari 296 GT3', annee: 2026,
-    pilotes: [['Elie Tinog', 'FR'], ['Felipe Allongue', 'BE']], affiche: suzukaBlaze },
-  { course: '24 Heures de Spa', jeu: 'iRacing', equipe: 'Academy 1', position: 1,
-    pilotes: [['François Lambrecq', 'FR'], ['Alain Bertschy', 'CH'], ['Damien Rivet', 'FR'], ['Felipe Allongue', 'BE']], affiche: spa24Academy1 },
-  { course: '24 Heures du Nürburgring', jeu: 'iRacing', equipe: 'Blaze', position: 1, voiture: 'Aston Martin Vantage GT3', affiche: nurburgringBlaze },
-  { course: '500 Miles d\'Indianapolis', jeu: 'iRacing', position: 1, voiture: 'Dallara IR-18',
-    pilotes: [['Antoine Barbosa', 'FR']], affiche: indyBarbosa },
-  { course: '12 Heures de Sebring', jeu: 'iRacing', equipe: 'Comète', position: 1, voiture: 'Ford Mustang GT3',
-    pilotes: [['Damien Wuilmus', 'BE'], ['Ulrich Jacoby', 'BE'], ['Yohan Van den Bosch', 'BE']], affiche: sebringComete },
-  // Daytona : une affiche par équipage (positions reprises des affiches)
-  { course: '24 Heures de Daytona', jeu: 'iRacing', equipe: 'Academy 1', position: 2, voiture: 'Dallara P217 (LMP2)', affiche: daytonaAcademy1 },
-  { course: '24 Heures de Daytona', jeu: 'iRacing', equipe: 'Comète', position: 3, split: '28', voiture: 'Aston Martin Vantage GT3', affiche: daytonaComete },
-  { course: '24 Heures de Daytona', jeu: 'iRacing', equipe: 'Academy 2', position: 3, voiture: 'Porsche 911 GT3 R', affiche: daytonaAcademy2 },
-  { course: '24 Heures du Mans', jeu: 'iRacing', equipe: 'Academy 2', position: 3, split: '13/15', annee: 2026, affiche: leMansAcademy2 },
-  { course: '12 Heures de Bathurst', jeu: 'iRacing', equipe: 'Academy 1', position: 3, split: '22', voiture: 'Porsche 992 GT3',
-    pilotes: [['Damien Wuilmus', 'BE'], ['Lukas Da Rocha', 'FR'], ['Killian Marie', 'FR']], affiche: bathurstAcademy },
-  { course: '24 Heures du Mans — Majors Series', jeu: 'iRacing', equipe: 'Blaze', position: 3, split: '12', voiture: 'Porsche 911 GT3 R',
-    pilotes: [['François Lambrecq', 'FR'], ['Christopher Salingros', 'BE'], ['Jérémy Gorré', 'FR'], ['Christophe Vannobel', 'FR'], ['Joseph Assez', 'BE']],
-    affiche: leMansMajorsBlaze },
-  { course: '6 Heures de Spa-Francorchamps', jeu: 'iRacing', equipe: 'Dark', position: 3, split: '5/11',
-    pilotes: [['Thomas Doyen', 'BE'], ['Elie Tinog', 'FR']], affiche: spa6hDark },
+  // ---------- 2025 ----------
   { course: '24 Heures de Fuji', jeu: 'iRacing', equipe: 'Alpha', position: 1, annee: 2025 },
-
-  // ---------- Le Mans Ultimate ----------
   { course: '6 Heures de Fuji', jeu: 'LMU', position: 1, annee: 2025,
     resultats: [
       { equipe: 'Galaxy', position: 1 },
@@ -76,11 +54,42 @@ const liste: Trophee[] = [
       { equipe: 'Nebula', position: 3 },
     ] },
   { course: 'ELMS Silverstone', jeu: 'LMU', equipe: 'Galaxy', position: 2, voiture: 'LMP3', annee: 2025 },
+
+  // ---------- 2026, date exacte inconnue (rangées comme les plus anciennes) ----------
   { course: '4 Heures de Bahreïn', jeu: 'LMU', position: 2, voiture: 'Porsche 911 GT3 R (LMGT3)',
     pilotes: [['Antoine Barbosa', 'FR']], affiche: bahrainBarbosa },
   { course: '6 Heures de Monza', jeu: 'LMU', equipe: 'Nebula', position: 3, affiche: monzaNebula },
   { course: '2h20 de Barcelone', jeu: 'LMU', position: 3, voiture: 'Ferrari 499P',
     pilotes: [['Antoine Barbosa', 'FR']], affiche: barceloneBarbosa },
+  { course: '24 Heures du Mans — Majors Series', jeu: 'iRacing', equipe: 'Blaze', position: 3, split: '12', voiture: 'Porsche 911 GT3 R',
+    pilotes: [['François Lambrecq', 'FR'], ['Christopher Salingros', 'BE'], ['Jérémy Gorré', 'FR'], ['Christophe Vannobel', 'FR'], ['Joseph Assez', 'BE']],
+    affiche: leMansMajorsBlaze },
+  { course: '6 Heures de Spa-Francorchamps', jeu: 'iRacing', equipe: 'Dark', position: 3, split: '5/11',
+    pilotes: [['Thomas Doyen', 'BE'], ['Elie Tinog', 'FR']], affiche: spa6hDark },
+
+  // ---------- 2026, dans l'ordre du calendrier iRacing ----------
+  // Daytona (janvier) : une affiche par équipage (positions reprises des affiches)
+  { course: '24 Heures de Daytona', jeu: 'iRacing', equipe: 'Academy 1', position: 2, voiture: 'Dallara P217 (LMP2)', affiche: daytonaAcademy1 },
+  { course: '24 Heures de Daytona', jeu: 'iRacing', equipe: 'Comète', position: 3, split: '28', voiture: 'Aston Martin Vantage GT3', affiche: daytonaComete },
+  { course: '24 Heures de Daytona', jeu: 'iRacing', equipe: 'Academy 2', position: 3, voiture: 'Porsche 911 GT3 R', affiche: daytonaAcademy2 },
+  // Bathurst (février)
+  { course: '12 Heures de Bathurst', jeu: 'iRacing', equipe: 'Academy 1', position: 3, split: '22', voiture: 'Porsche 992 GT3',
+    pilotes: [['Damien Wuilmus', 'BE'], ['Lukas Da Rocha', 'FR'], ['Killian Marie', 'FR']], affiche: bathurstAcademy },
+  // Sebring (mars)
+  { course: '12 Heures de Sebring', jeu: 'iRacing', equipe: 'Comète', position: 1, voiture: 'Ford Mustang GT3',
+    pilotes: [['Damien Wuilmus', 'BE'], ['Ulrich Jacoby', 'BE'], ['Yohan Van den Bosch', 'BE']], affiche: sebringComete },
+  // Nürburgring et Indianapolis (mai)
+  { course: '24 Heures du Nürburgring', jeu: 'iRacing', equipe: 'Blaze', position: 1, voiture: 'Aston Martin Vantage GT3', affiche: nurburgringBlaze },
+  { course: '500 Miles d\'Indianapolis', jeu: 'iRacing', position: 1, voiture: 'Dallara IR-18',
+    pilotes: [['Antoine Barbosa', 'FR']], affiche: indyBarbosa },
+  // Spa (juillet)
+  { course: '24 Heures de Spa', jeu: 'iRacing', equipe: 'Academy 1', position: 1,
+    pilotes: [['François Lambrecq', 'FR'], ['Alain Bertschy', 'CH'], ['Damien Rivet', 'FR'], ['Felipe Allongue', 'BE']], affiche: spa24Academy1 },
+  // Le Mans (5–6 septembre) et Suzuka (10–15 septembre), archivés depuis la page Résultats
+  { course: '24 Heures du Mans', jeu: 'iRacing', equipe: 'Blaze', position: 1, split: '8/15', annee: 2026, affiche: leMansBlaze },
+  { course: '24 Heures du Mans', jeu: 'iRacing', equipe: 'Academy 2', position: 3, split: '13/15', annee: 2026, affiche: leMansAcademy2 },
+  { course: 'Suzuka 1000 km', jeu: 'iRacing', equipe: 'Blaze', position: 1, split: '7/11', voiture: 'Ferrari 296 GT3', annee: 2026,
+    pilotes: [['Elie Tinog', 'FR'], ['Felipe Allongue', 'BE']], affiche: suzukaBlaze },
 ];
 
 // ---------- Podiums repris automatiquement de la page Résultats ----------
@@ -108,4 +117,7 @@ const depuisResultats: Trophee[] = courses.flatMap((c) =>
 );
 
 // année par défaut : une course dont l'affiche ne précise pas l'année compte pour 2026
-export const trophees: Trophee[] = [...liste, ...depuisResultats].map((t) => ({ annee: 2026, ...t }));
+// Ordre « du plus récent au plus ancien » : les podiums de la page Résultats (déjà du plus récent
+// au plus ancien) d'abord, puis la liste ci-dessus à l'envers (la dernière ligne ajoutée = la plus récente).
+// La page classe ensuite par année (la plus récente d'abord) en gardant cet ordre.
+export const trophees: Trophee[] = [...depuisResultats, ...[...liste].reverse()].map((t) => ({ annee: 2026, ...t }));

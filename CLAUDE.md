@@ -76,6 +76,9 @@ Pour un nouveau trophée : copier l'affiche, l'importer, ajouter une ligne (`cou
 `equipe`, `position`, `split`, `pilotes`). La page classe automatiquement (victoires puis podiums) et
 recalcule les chiffres. Affiche avec plusieurs équipages (ex. Daytona) : champ `resultats`.
 **Ne garder que les podiums (P1 à P3)** : ignorer les autres classements et les abandons.
+**Ordre** : chaque carrousel (P1, P2, P3) va du plus récent au plus ancien. La liste de `palmares.ts`
+est chronologique : un nouveau trophée (ou un podium archivé depuis les Résultats) s'ajoute **toujours
+en bas de la liste** ; les podiums encore sur la page Résultats passent automatiquement en premier.
 Sans affiche (résultat donné en texte) : omettre `affiche` → visuel aux couleurs du jeu.
 `annee` : à renseigner si l'affiche ou l'utilisateur la donne ; sinon la course compte pour 2026 (défaut).
 

@@ -5,13 +5,12 @@ import LogoJeu from '../components/LogoJeu.astro';
 import { Image } from 'astro:assets';
 import { trophees, type Position, type Trophee } from '../data/palmares';
 
-const rang = (p: Position) => (p === 'DNF' ? 99 : p);
 const podium = (p: Position) => (p === 1 ? 'or' : p === 2 ? 'argent' : p === 3 ? 'bronze' : p === 'DNF' ? 'dnf' : '');
 const posTexte = (p: Position) => (p === 'DNF' ? 'DNF' : `P${p}`);
 const nomJeu = { iRacing: 'iRacing', LMU: 'Le Mans Ultimate' } as const;
 
-// victoires d'abord, puis P2, P3 (l'ordre du fichier est gardé à égalité)
-const tries = trophees.map((t, i) => ({ t, i })).sort((a, b) => rang(a.t.position) - rang(b.t.position) || a.i - b.i).map(({ t }) => t);
+// dans chaque carrousel : du plus récent au plus ancien (année, puis dernier ajouté en premier)
+const tries = trophees.map((t, i) => ({ t, i })).sort((a, b) => (b.t.annee ?? 0) - (a.t.annee ?? 0) || a.i - b.i).map(({ t }) => t);
 // années présentes (les plus récentes d'abord) pour le filtre
 const annees = [...new Set(trophees.map((t) => t.annee).filter((a): a is number => !!a))].sort((a, b) => b - a);
 
