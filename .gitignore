@@ -27,3 +27,7 @@ pnpm-debug.log*
 .env*
 
 Ascendia/
+
+# outil de détourage des portraits (npm run portraits)
+.venv-portraits/
+scripts/__pycache__/

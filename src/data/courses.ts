@@ -1,4 +1,4 @@
-﻿// Calendrier des iRacing Special Events 2026 (source : iracing.com/special-events)
+// Calendrier des iRacing Special Events 2026 (source : iracing.com/special-events)
 // Pour signaler qu'Ascendia participe à une course : ajoute `ascendia: true`.
 //
 // Seules les courses d'une des catégories ci-dessous sont affichées sur le site ;
@@ -43,7 +43,7 @@ const tousLesEvenements: Evenement[] = [
   { debut: '2026-09-18', fin: '2026-09-20', nom: 'Britcar 24', circuit: 'Silverstone', classes: 'GT3, GT4', type: 'team' },
   { debut: '2026-09-25', fin: '2026-09-27', nom: 'Petit Le Mans', circuit: 'Michelin Raceway Road Atlanta', classes: 'GTP, LMP2, GT3', type: 'team', ascendia: true },
   { debut: '2026-10-02', fin: '2026-10-04', nom: 'Bathurst 1000', circuit: 'Mount Panorama Circuit', classes: 'Supercars', type: 'team' },
-  { debut: '2026-10-16', fin: '2026-10-18', nom: '8 Hours of Indianapolis', circuit: 'Indianapolis Motor Speedway', classes: 'GT3', type: 'team' },
+  { debut: '2026-10-16', fin: '2026-10-18', nom: '8 Hours of Indianapolis', circuit: 'Indianapolis Motor Speedway', classes: 'GT3', type: 'team', ascendia: true },
   { debut: '2026-10-30', fin: '2026-10-31', nom: 'iRacing FF1600 Festival', circuit: 'Brands Hatch', classes: 'FF1600', type: 'standard' },
   { debut: '2026-11-04', fin: '2026-11-09', nom: 'Homestead Championship', circuit: 'Homestead Miami Speedway', classes: 'NASCAR Cup', type: 'standard' },
   { debut: '2026-11-13', fin: '2026-11-15', nom: 'SFL Mountain Showdown', circuit: 'Mount Panorama Circuit', classes: 'Super Formula Lights', type: 'standard' },
@@ -65,6 +65,35 @@ function categoriesSuivies(classes: string) {
 export const evenements: Evenement[] = tousLesEvenements
   .map((e) => ({ ...e, classes: categoriesSuivies(e.classes).join(', ') }))
   .filter((e) => e.classes !== '');
+
+// ================= CALENDRIER LMU (Le Mans Ultimate) =================
+// Séparé du calendrier iRacing : jamais mélangé, affiché en rouge Ferrari, et PAS filtré
+// par CATEGORIES_SUIVIES (toutes les catégories LMU sont gardées).
+// Les dates LMU sont données par semaine (« w/c » = semaine commençant le …).
+
+export interface EvenementLmu {
+  semaine: string;   // lundi de la semaine de course, AAAA-MM-JJ
+  nom: string;
+  circuit: string;
+  classes: string;
+  ascendia?: string; // date de la course d'Ascendia (AAAA-MM-JJ) si la team est engagée → bloc mis en avant
+}
+
+export const evenementsLmu: EvenementLmu[] = [
+  { semaine: '2026-09-29', nom: '6 Hours of Fuji', circuit: 'Fuji Speedway', classes: 'Hypercar, LMGT3', ascendia: '2026-10-03' },
+  { semaine: '2026-10-06', nom: '10 Hours of Road Atlanta', circuit: 'Michelin Raceway Road Atlanta', classes: 'Hypercar, WEC LMP2, LMGT3', ascendia: '2026-10-10' },
+  { semaine: '2026-10-13', nom: '4 Hours of Portimão', circuit: 'Algarve International Circuit', classes: 'ELMS LMP2, LMP3, LMGT3' },
+  { semaine: '2026-10-20', nom: '24 Hours of Le Mans', circuit: 'Circuit de la Sarthe', classes: 'Hypercar, WEC LMP2, LMGT3', ascendia: '2026-10-24' },
+  { semaine: '2026-11-10', nom: '8 Hours of Bahrain', circuit: 'Bahrain International Circuit', classes: 'Hypercar, LMGT3' },
+  { semaine: '2026-12-01', nom: '6 Hours of Silverstone', circuit: 'Silverstone', classes: 'Hypercar, LMGT3' },
+];
+
+/** dernier jour de la semaine de course (lundi + 6 jours) */
+export const finDeSemaine = (lundi: string) => {
+  const d = new Date(lundi + 'T12:00:00');
+  d.setDate(d.getDate() + 6);
+  return d.toISOString().slice(0, 10);
+};
 
 export const libelleType: Record<TypeEvenement, string> = {
   team: 'Team Event',

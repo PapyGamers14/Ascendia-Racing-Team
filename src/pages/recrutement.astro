@@ -1,0 +1,143 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { Image } from 'astro:assets';
+import { siDiscord, siInstagram, siFacebook } from 'simple-icons';
+import affiche from '../assets/affiche-recrutement.webp';
+
+// Pour nous contacter : message privé sur l'un de ces réseaux
+const contacts = [
+  { nom: 'Discord', action: 'Rejoindre le serveur', url: 'https://discord.gg/fwKemzCC7J', icone: siDiscord, couleur: '#5865f2' },
+  { nom: 'Instagram', action: 'Nous écrire en MP', url: 'https://www.instagram.com/ascendiaracingteam/', icone: siInstagram, couleur: '#e1306c' },
+  { nom: 'Facebook', action: 'Nous écrire en MP', url: 'https://www.facebook.com/profile.php?id=61587195485081', icone: siFacebook, couleur: '#1877f2' },
+];
+
+const atouts = [
+  { titre: 'iRacing & Le Mans Ultimate', texte: "Tous types d'endurance, du sprint aux 24 heures." },
+  { titre: 'Apprendre et progresser', texte: "L'Academy t'accompagne, que tu débutes ou que tu chasses le chrono." },
+  { titre: 'Entraide & fair-play', texte: 'On roule ensemble, on se relaie, on se respecte.' },
+];
+
+const chiffres = [
+  { valeur: 'Belge', label: 'Association' },
+  { valeur: '40+', label: 'Pilotes' },
+  { valeur: '30 €/an', label: 'Cotisation' },
+];
+---
+<Base title="Recrutement" description="L'Ascendia Racing Team recrute des pilotes motivés et actifs sur iRacing et Le Mans Ultimate. Contacte-nous en message privé sur Discord, Instagram ou Facebook.">
+  <PageHero
+    index="07"
+    kicker="Rejoins l'Ascendia"
+    titre="On "
+    accent="recrute"
+    intro="Des pilotes motivés et actifs, sur iRacing et Le Mans Ultimate. Envie de rouler en équipe ? Écris-nous."
+  />
+
+  <section class="wrap recrutement" aria-labelledby="t-rejoindre">
+    <div class="affiche reveal">
+      <Image
+        src={affiche}
+        alt="Affiche de recrutement Ascendia Racing : on recrute des pilotes motivés et actifs sur iRacing et Le Mans Ultimate. Tous types d'endurance, apprendre et progresser ensemble, entraide et fair-play. Association belge, plus de 40 pilotes, cotisation de 30 € par an. Rejoins l'équipe, contacte-nous en message privé."
+        widths={[480, 800, 1080]}
+        sizes="(max-width: 960px) 100vw, 620px"
+        loading="eager"
+      />
+    </div>
+
+    <div class="infos reveal" style="--d:.1s">
+      <h2 id="t-rejoindre">Rejoins <em>l'équipe</em></h2>
+
+      <ul class="chiffres">
+        {chiffres.map((c) => (
+          <li><strong>{c.valeur}</strong><span class="mono">{c.label}</span></li>
+        ))}
+      </ul>
+
+      <ul class="atouts">
+        {atouts.map((a) => (
+          <li><strong>{a.titre}</strong><span>{a.texte}</span></li>
+        ))}
+      </ul>
+
+      <p class="mono contact-titre">Contacte-nous en message privé</p>
+      <ul class="contacts">
+        {contacts.map((c) => (
+          <li>
+            <a href={c.url} target="_blank" rel="noopener noreferrer" style={`--brand:${c.couleur}`}>
+              <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d={c.icone.path} fill="currentColor" /></svg>
+              <span class="c-txt"><strong>{c.nom}</strong><span class="mono">{c.action}</span></span>
+              <svg class="c-fleche" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" /></svg>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .recrutement {
+    display: grid;
+    grid-template-columns: minmax(0, 620px) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: start;
+    padding-block: clamp(24px, 4vw, 48px) clamp(64px, 8vw, 110px);
+  }
+  .affiche :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    box-shadow: 0 30px 80px -30px rgba(18, 168, 216, .45), 0 0 0 1px var(--line);
+  }
+
+  .infos { position: sticky; top: 110px; }
+  .infos h2 { margin: 0 0 24px; font-size: clamp(2.4rem, 5vw, 3.6rem); }
+  .infos h2 em { color: var(--accent); font-style: normal; }
+
+  .chiffres {
+    list-style: none;
+    margin: 0 0 28px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 3px solid var(--accent);
+    background: var(--bg-2);
+  }
+  .chiffres li { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; }
+  .chiffres li + li { border-left: 1px solid var(--line); }
+  .chiffres strong { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1; color: var(--accent-2); }
+  .chiffres .mono { font-size: .66rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+
+  .atouts { list-style: none; margin: 0 0 32px; padding: 0; display: grid; gap: 14px; }
+  .atouts li { display: flex; flex-direction: column; gap: 2px; padding-left: 16px; border-left: 2px solid var(--accent); }
+  .atouts strong { font-family: var(--font-display); font-size: 1.25rem; text-transform: uppercase; }
+  .atouts span { color: var(--muted); }
+
+  .contact-titre { margin: 0 0 12px; color: var(--accent); text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; }
+  .contacts { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .contacts a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    color: var(--text);
+    text-decoration: none;
+    background: var(--bg-2);
+    box-shadow: inset 4px 0 0 var(--brand);
+    transition: background .25s, transform .25s var(--ease);
+  }
+  .contacts a > svg:first-child { color: var(--brand); flex: none; transition: color .25s; }
+  .contacts a:hover { background: var(--brand); transform: translateX(4px); }
+  .contacts a:hover > svg:first-child { color: #fff; }
+  .contacts a:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+  .c-txt { display: flex; flex-direction: column; flex: 1; }
+  .c-txt strong { font-family: var(--font-display); font-size: 1.5rem; text-transform: uppercase; line-height: 1.05; }
+  .c-txt .mono { font-size: .7rem; color: var(--muted); }
+  .contacts a:hover .c-txt .mono { color: rgba(255, 255, 255, .85); }
+  .c-fleche { flex: none; }
+
+  @media (max-width: 960px) {
+    .recrutement { grid-template-columns: 1fr; }
+    .infos { position: static; }
+  }
+</style>
