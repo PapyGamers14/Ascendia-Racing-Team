@@ -75,7 +75,6 @@ const tous: Membre[] = [
   { prenom: 'Eric', nom: 'Legrand', groupe: 'staff', role: 'Responsable académie', pilote: true, jeux: ['iRacing', 'LMU'], pays: 'FR' },
   { prenom: 'Cédric', nom: 'Taillieu', groupe: 'staff', role: 'Staff', pilote: true, jeux: ir, pays: 'BE' },
   { prenom: 'Mickaël', nom: 'Scherdel', groupe: 'staff', role: 'Staff', pilote: true, jeux: ir, pays: 'FR' },
-  { prenom: 'Elie', nom: 'Caron', groupe: 'staff', role: 'Staff', pilote: true, jeux: ir, pays: 'FR' },
 
   // ---------- Pilotes compétition ----------
   ...pilotes('competition', 'Pilote', [
@@ -99,6 +98,7 @@ const tous: Membre[] = [
     ['Arthur', 'Capelle', 'FR'], ['Adrien', 'Boccadoro', 'FR'], ['Jimmy', 'Janicot', 'FR'],
     ['Rudy', 'Pereira', 'FR'], ['Joseph', 'Assez', 'BE', irLmu], ['Cédric', 'Baligant', 'BE'],
     ['Michael', 'Wieczorek', 'FR'], ['Bruno', 'Marchica', 'BE'],
+    ['Grégory', 'Havaux', 'BE'], ['Vincent', 'Coomans', 'BE'],
     ['Davy', 'Retfirg', 'FR', lmu], ['Ulrich', 'Betemps', 'FR', lmu], ['Matys', 'Dumange', 'FR', lmu],
     ['Vivien', 'Pochon', 'FR', lmu], ['Sébastien', 'Bonnier', 'FR', lmu], ['Geoffrey', 'Lacroix', 'BE', lmu],
     ['Tom', 'Remeuf', 'FR', lmu], ['Xavier', 'Kulej', 'FR', lmu], ['Kevin', 'Souyri', 'FR', lmu],

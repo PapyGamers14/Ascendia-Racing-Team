@@ -83,7 +83,7 @@ export const evenementsLmu: EvenementLmu[] = [
   { semaine: '2026-09-29', nom: '6 Hours of Fuji', circuit: 'Fuji Speedway', classes: 'Hypercar, LMGT3', ascendia: '2026-10-03' },
   { semaine: '2026-10-06', nom: '10 Hours of Road Atlanta', circuit: 'Michelin Raceway Road Atlanta', classes: 'Hypercar, WEC LMP2, LMGT3', ascendia: '2026-10-10' },
   { semaine: '2026-10-13', nom: '4 Hours of Portimão', circuit: 'Algarve International Circuit', classes: 'ELMS LMP2, LMP3, LMGT3' },
-  { semaine: '2026-10-20', nom: '24 Hours of Le Mans', circuit: 'Circuit de la Sarthe', classes: 'Hypercar, WEC LMP2, LMGT3' },
+  { semaine: '2026-10-20', nom: '24 Hours of Le Mans', circuit: 'Circuit de la Sarthe', classes: 'Hypercar, WEC LMP2, LMGT3', ascendia: '2026-10-24' },
   { semaine: '2026-11-10', nom: '8 Hours of Bahrain', circuit: 'Bahrain International Circuit', classes: 'Hypercar, LMGT3' },
   { semaine: '2026-12-01', nom: '6 Hours of Silverstone', circuit: 'Silverstone', classes: 'Hypercar, LMGT3' },
 ];

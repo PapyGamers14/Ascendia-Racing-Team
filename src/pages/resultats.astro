@@ -85,6 +85,7 @@ const titre = (e: Equipage) => (e.equipe ? `Équipage ${e.equipe}` : (e.pilotes 
                   {e.split && <span class="mono split">Split<b>{e.split}</b></span>}
                 </div>
                 <p class="voiture">{e.voiture}</p>
+                {e.note && <span class="mono serie note note-carte">{e.note}</span>}
               </div>
             </li>
           ))}
@@ -172,6 +173,7 @@ const titre = (e: Equipage) => (e.equipe ? `Équipage ${e.equipe}` : (e.pilotes 
   .etiquettes { display: flex; flex-wrap: wrap; gap: 8px; }
   .serie { padding: 6px 12px; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); }
   .serie.note { color: var(--accent-2); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent); }
+  .note-carte { align-self: flex-start; font-size: .62rem; }
 
   /* ---------- CARTES D'ÉQUIPAGE ---------- */
   .equipages {

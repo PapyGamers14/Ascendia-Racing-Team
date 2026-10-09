@@ -27,7 +27,6 @@ export const streamers: Streamer[] = [
   // exemple : { nom: 'Mathéo Manaranche', twitch: 'nomdelachaine' },
   { nom: 'Antoine Barbosa', twitch: 'massardotv' },
   { nom: 'François Baligant', twitch: 'ligsio' },
-  { nom: 'Elie Caron', twitch: 'tin0g91' },
   { nom: 'Eddy Velez', twitch: 'eddyontrack' },
   { nom: 'Mickaël Scherdel', twitch: 'calibibi95' },
   { nom: 'François Lambrecq', youtube: 'https://www.youtube.com/@shoum6266' },

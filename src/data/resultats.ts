@@ -1,8 +1,9 @@
 import type { ImageMetadata } from 'astro';
 import type { Pays } from './pays';
 
-import ifrnWuilmus from '../assets/resultats/ifrn-chicagoland-wuilmus.webp';
-import ifrnBaligant from '../assets/resultats/ifrn-chicagoland-baligant.webp';
+import bullringBaligant from '../assets/resultats/ifrn-bullring-baligant.webp';
+import bullringBarbosa from '../assets/resultats/ifrn-bullring-barbosa.webp';
+import bullringWuilmus from '../assets/resultats/ifrn-bullring-wuilmus.webp';
 import plmDark from '../assets/resultats/petit-le-mans-dark.webp';
 import plmAcademy1 from '../assets/resultats/petit-le-mans-academy-1.webp';
 import plmAstra from '../assets/resultats/petit-le-mans-astra.webp';
@@ -27,6 +28,7 @@ export interface Equipage {
   voiture: string;
   categorie: string;     // GTP, GT3, NASCAR…
   pilotes?: Pilote[];    // facultatif si l'affiche ne les nomme pas ; en solo, le pilote sert de titre
+  note?: string;         // mention propre à cette carte, ex. « Course de consolation »
   affiche: ImageMetadata;
 }
 
@@ -42,6 +44,17 @@ export interface Course {
 }
 
 export const courses: Course[] = [
+  {
+    nom: 'I-FRN · Bullring', serie: 'Rookie Series · Fall 2026', debut: '2026-10-08', fin: '2026-10-08', circuit: 'Las Vegas Bullring',
+    equipages: [
+      { position: 3, voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: bullringBaligant, note: 'Course principale',
+        pilotes: [{ nom: 'François Baligant', pays: 'BE' }] },
+      { position: 5, voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: bullringBarbosa, note: 'Course principale',
+        pilotes: [{ nom: 'Antoine Barbosa', pays: 'FR' }] },
+      { position: 6, voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: bullringWuilmus, note: 'Course de consolation',
+        pilotes: [{ nom: 'Damien Wuilmus', pays: 'BE' }] },
+    ],
+  },
   {
     nom: '6 Heures de Fuji', jeu: 'LMU', serie: 'Le Mans Ultimate', debut: '2026-10-03', fin: '2026-10-03', circuit: 'Fuji Speedway',
     equipages: [
@@ -66,16 +79,6 @@ export const courses: Course[] = [
         pilotes: [{ nom: 'Michel Tonnon', pays: 'BE' }, { nom: 'Elie Tinog', pays: 'FR' }, { nom: 'Otch Massari', pays: 'MA' }] },
       { equipe: 'Blaze', position: 'DNF', split: '7/9', voiture: 'Aston Martin Valkyrie', categorie: 'GTP', affiche: plmBlaze,
         pilotes: [{ nom: 'Antoine Barbosa', pays: 'FR' }, { nom: 'Mathéo Manaranche', pays: 'FR' }, { nom: 'Lukas Da Rocha', pays: 'FR' }] },
-    ],
-  },
-  {
-    nom: 'I-FRN · Chicagoland', serie: 'Rookie Series · Fall 2026', note: 'Course de consolation',
-    debut: '2026-09-17', fin: '2026-09-17', circuit: 'Chicagoland Speedway',
-    equipages: [
-      { position: 4, voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: ifrnWuilmus,
-        pilotes: [{ nom: 'Damien Wuilmus', pays: 'BE' }] },
-      { position: 'DNF', voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: ifrnBaligant,
-        pilotes: [{ nom: 'François Baligant', pays: 'BE' }] },
     ],
   },
 ];

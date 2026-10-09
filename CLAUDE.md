@@ -63,7 +63,8 @@ l'utilisateur partage directement les affiches de résultats. Pour chacune :
   (la page coupe aussi automatiquement à 3 courses, constante `NB_COURSES`) ;
 - course en **solo** (pas d'équipage sur l'affiche) : laisser `equipe` vide et mettre le pilote
   dans `pilotes` (il sert alors de titre de carte, avec son drapeau) ; abandon : `position: 'DNF'` ;
-  mention type « Course de consolation » : champ `note` de la course ;
+  mention type « Course de consolation » : champ `note` de la course (toutes les cartes) ou de
+  l'équipage (une seule carte, ex. « Course principale » / « Course de consolation » dans la même course) ;
 - ne PAS saisir les numéros de voiture (fictifs) ; les noms des pilotes ne sont pas affichés
   sur la carte (déjà sur l'affiche) mais restent dans les données pour le texte alternatif.
 
