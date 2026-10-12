@@ -272,7 +272,15 @@ const styleCarte = (s: (typeof cartes)[number], i: number) => {
   /* plusieurs plateformes : contour en dégradé avec fondu entre leurs couleurs */
   .carte.multi { border-image: var(--degrade) 1; }
   .carte:hover { transform: translateY(-4px); box-shadow: 0 12px 32px color-mix(in srgb, var(--plat) 35%, transparent); }
-  .carte.en-live { border-color: #ff4655; border-image: none; box-shadow: 0 0 0 2px rgba(255, 70, 85, .35); }
+  /* en direct : la carte garde la couleur de sa plateforme, avec un halo qui pulse (+ badge LIVE) */
+  .carte.en-live { animation: halo-live 2s ease-in-out infinite; }
+  @keyframes halo-live {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--plat) 0%, transparent); }
+    50% { box-shadow: 0 0 22px 2px color-mix(in srgb, var(--plat) 60%, transparent); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .carte.en-live { animation: none; box-shadow: 0 0 18px 2px color-mix(in srgb, var(--plat) 50%, transparent); }
+  }
   .carte-visuel { position: relative; }
   .carte :global(.carte-img) { aspect-ratio: 3 / 4; }
   .carte :global(.pd-img) { object-position: 50% 12%; }

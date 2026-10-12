@@ -98,7 +98,7 @@ const tous: Membre[] = [
     ['Arthur', 'Capelle', 'FR'], ['Adrien', 'Boccadoro', 'FR'], ['Jimmy', 'Janicot', 'FR'],
     ['Rudy', 'Pereira', 'FR'], ['Joseph', 'Assez', 'BE', irLmu], ['Cédric', 'Baligant', 'BE'],
     ['Michael', 'Wieczorek', 'FR'], ['Bruno', 'Marchica', 'BE'],
-    ['Grégory', 'Havaux', 'BE'], ['Vincent', 'Coomans', 'BE'],
+    ['Grégory', 'Havaux', 'BE'], ['Vincent', 'Coomans', 'BE'], ['Fabrice', 'Laurent', 'BE'],
     ['Davy', 'Retfirg', 'FR', lmu], ['Ulrich', 'Betemps', 'FR', lmu], ['Matys', 'Dumange', 'FR', lmu],
     ['Vivien', 'Pochon', 'FR', lmu], ['Sébastien', 'Bonnier', 'FR', lmu], ['Geoffrey', 'Lacroix', 'BE', lmu],
     ['Tom', 'Remeuf', 'FR', lmu], ['Xavier', 'Kulej', 'FR', lmu], ['Kevin', 'Souyri', 'FR', lmu],

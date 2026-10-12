@@ -30,4 +30,5 @@ export const streamers: Streamer[] = [
   { nom: 'Eddy Velez', twitch: 'eddyontrack' },
   { nom: 'Mickaël Scherdel', twitch: 'calibibi95' },
   { nom: 'François Lambrecq', youtube: 'https://www.youtube.com/@shoum6266' },
+  { nom: 'Kevin Souyri', twitch: 'apexofracing' },
 ];
