@@ -45,7 +45,7 @@ const tousLesEvenements: Evenement[] = [
   { debut: '2026-10-02', fin: '2026-10-04', nom: 'Bathurst 1000', circuit: 'Mount Panorama Circuit', classes: 'Supercars', type: 'team' },
   { debut: '2026-10-16', fin: '2026-10-18', nom: '8 Hours of Indianapolis', circuit: 'Indianapolis Motor Speedway', classes: 'GT3', type: 'team', ascendia: true },
   { debut: '2026-10-30', fin: '2026-10-31', nom: 'iRacing FF1600 Festival', circuit: 'Brands Hatch', classes: 'FF1600', type: 'standard' },
-  { debut: '2026-11-04', fin: '2026-11-09', nom: 'Homestead Championship', circuit: 'Homestead Miami Speedway', classes: 'NASCAR Cup', type: 'standard' },
+  { debut: '2026-11-04', fin: '2026-11-09', nom: 'Homestead Championship', circuit: 'Homestead Miami Speedway', classes: 'NASCAR Cup', type: 'standard', ascendia: true },
   { debut: '2026-11-13', fin: '2026-11-15', nom: 'SFL Mountain Showdown', circuit: 'Mount Panorama Circuit', classes: 'Super Formula Lights', type: 'standard' },
   { debut: '2026-11-17', fin: '2026-11-21', nom: 'iRacing Runoffs', circuit: 'Road America', classes: '6 classes', type: 'super' },
   { debut: '2026-12-02', fin: '2026-12-07', nom: 'Winter Derby', circuit: 'Five Flags Speedway', classes: 'Super Late Model', type: 'standard' },

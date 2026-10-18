@@ -18,6 +18,7 @@ import spa6hDark from '../assets/palmares/spa-6h-dark.webp';
 import sebringComete from '../assets/palmares/sebring-12h-comete.webp';
 import bahrainBarbosa from '../assets/palmares/bahrain-4h-barbosa.webp';
 import barceloneBarbosa from '../assets/palmares/barcelone-2h20-barbosa.webp';
+import plmDark from '../assets/palmares/petit-le-mans-dark.webp';
 
 // Palmarès : les meilleurs résultats de la team (victoires et podiums), à garder sur la durée
 // (contrairement à la page Résultats qui ne montre que les 3 dernières courses).
@@ -90,6 +91,9 @@ const liste: Trophee[] = [
   { course: '24 Heures du Mans', jeu: 'iRacing', equipe: 'Academy 2', position: 3, split: '13/15', annee: 2026, affiche: leMansAcademy2 },
   { course: 'Suzuka 1000 km', jeu: 'iRacing', equipe: 'Blaze', position: 1, split: '7/11', voiture: 'Ferrari 296 GT3', annee: 2026,
     pilotes: [['Elie Tinog', 'FR'], ['Felipe Allongue', 'BE']], affiche: suzukaBlaze },
+  // Petit Le Mans (25–27 septembre), archivé depuis la page Résultats
+  { course: 'Petit Le Mans', jeu: 'iRacing', equipe: 'Dark', position: 2, split: '20/23', voiture: 'Ferrari 296 GT3', annee: 2026,
+    pilotes: [['François Lambrecq', 'FR'], ['Jérôme Zaracki', 'FR'], ['Alain Bertschy', 'CH']], affiche: plmDark },
 ];
 
 // ---------- Podiums repris automatiquement de la page Résultats ----------

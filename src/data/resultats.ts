@@ -1,14 +1,15 @@
 import type { ImageMetadata } from 'astro';
 import type { Pays } from './pays';
 
+import indyComete from '../assets/resultats/indy-8h-comete.webp';
+import indyAstra from '../assets/resultats/indy-8h-astra.webp';
+import indyBlaze from '../assets/resultats/indy-8h-blaze.webp';
+import indyDark from '../assets/resultats/indy-8h-dark.webp';
+import indyAcademy1 from '../assets/resultats/indy-8h-academy-1.webp';
+import indyAcademy2 from '../assets/resultats/indy-8h-academy-2.webp';
 import bullringBaligant from '../assets/resultats/ifrn-bullring-baligant.webp';
 import bullringBarbosa from '../assets/resultats/ifrn-bullring-barbosa.webp';
 import bullringWuilmus from '../assets/resultats/ifrn-bullring-wuilmus.webp';
-import plmDark from '../assets/resultats/petit-le-mans-dark.webp';
-import plmAcademy1 from '../assets/resultats/petit-le-mans-academy-1.webp';
-import plmAstra from '../assets/resultats/petit-le-mans-astra.webp';
-import plmComete from '../assets/resultats/petit-le-mans-comete.webp';
-import plmBlaze from '../assets/resultats/petit-le-mans-blaze.webp';
 import fujiGalaxy from '../assets/resultats/fuji-6h-galaxy.webp';
 import fujiAcademy1 from '../assets/resultats/fuji-6h-academy-1.webp';
 import fujiEclipse from '../assets/resultats/fuji-6h-eclipse.webp';
@@ -45,6 +46,23 @@ export interface Course {
 
 export const courses: Course[] = [
   {
+    nom: "8 Heures d'Indianapolis", serie: 'iRacing Special Event', debut: '2026-10-16', fin: '2026-10-18', circuit: 'Indianapolis Motor Speedway',
+    equipages: [
+      { equipe: 'Dark', position: 5, split: '5/6', voiture: 'Ferrari 296 GT3', categorie: 'GT3', affiche: indyDark,
+        pilotes: [{ nom: 'François Lambrecq', pays: 'FR' }, { nom: 'Alain Bertschy', pays: 'CH' }] },
+      { equipe: 'Astra', position: 7, split: '4/6', voiture: 'Chevrolet Corvette Z06 GT3.R', categorie: 'GT3', affiche: indyAstra,
+        pilotes: [{ nom: 'Antoine Barbosa', pays: 'FR' }, { nom: 'Nicolas Rumen', pays: 'FR' }] },
+      { equipe: 'Academy 2', position: 24, split: '6/6', voiture: 'Ferrari 296 GT3', categorie: 'GT3', affiche: indyAcademy2,
+        pilotes: [{ nom: 'Vincent Coomans', pays: 'BE' }, { nom: 'François Mahé', pays: 'FR' }] },
+      { equipe: 'Academy 1', position: 31, split: '5/6', voiture: 'Ferrari 296 GT3', categorie: 'GT3', affiche: indyAcademy1,
+        pilotes: [{ nom: 'Bruno Marchica', pays: 'BE' }, { nom: 'Michaël Wieczorek', pays: 'FR' }] },
+      { equipe: 'Blaze', position: 34, split: '2/6', voiture: 'Ferrari 296 GT3', categorie: 'GT3', affiche: indyBlaze,
+        pilotes: [{ nom: 'Christophe Vannobel', pays: 'FR' }, { nom: 'Eddy Velez', pays: 'FR' }] },
+      { equipe: 'Comète', position: 'DNF', voiture: 'Porsche 911 GT3 R (992)', categorie: 'GT3', affiche: indyComete,
+        pilotes: [{ nom: 'Damien Wuilmus', pays: 'BE' }, { nom: 'Thomas Doyen', pays: 'BE' }] },
+    ],
+  },
+  {
     nom: 'I-FRN · Bullring', serie: 'Rookie Series · Fall 2026', debut: '2026-10-08', fin: '2026-10-08', circuit: 'Las Vegas Bullring',
     equipages: [
       { position: 3, voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: bullringBaligant, note: 'Course principale',
@@ -64,21 +82,6 @@ export const courses: Course[] = [
         pilotes: [{ nom: 'Vivien Pochon', pays: 'FR' }, { nom: 'Matys Dumange', pays: 'FR' }, { nom: 'Kevin Souyri', pays: 'FR' }] },
       { equipe: 'Eclipse', position: 7, split: '6/11', voiture: 'Hypercar', categorie: 'Hypercar', affiche: fujiEclipse,
         pilotes: [{ nom: 'Mickael Nakazuma', pays: 'BE' }, { nom: 'Yohan Van den Bosch', pays: 'BE' }] },
-    ],
-  },
-  {
-    nom: 'Petit Le Mans', serie: 'iRacing Special Event', debut: '2026-09-25', fin: '2026-09-27', circuit: 'Michelin Raceway Road Atlanta',
-    equipages: [
-      { equipe: 'Dark', position: 2, split: '20/23', voiture: 'Ferrari 296 GT3', categorie: 'GT3', affiche: plmDark,
-        pilotes: [{ nom: 'François Lambrecq', pays: 'FR' }, { nom: 'Jérôme Zaracki', pays: 'FR' }, { nom: 'Alain Bertschy', pays: 'CH' }] },
-      { equipe: 'Academy 1', position: 7, split: '8/9', voiture: 'Porsche 911 GT3 R (992)', categorie: 'GT3', affiche: plmAcademy1,
-        pilotes: [{ nom: 'Damien Wuilmus', pays: 'BE' }, { nom: 'Bruno Marchica', pays: 'BE' }] },
-      { equipe: 'Astra', position: 8, split: '3/10', voiture: 'Aston Martin Valkyrie', categorie: 'GTP', affiche: plmAstra,
-        pilotes: [{ nom: 'Mickael Scherdel', pays: 'FR' }, { nom: 'Julien Castro', pays: 'FR' }, { nom: 'Jules Castro', pays: 'FR' }] },
-      { equipe: 'Comète', position: 'DNF', split: '10/23', voiture: 'McLaren 720S GT3', categorie: 'GT3', affiche: plmComete,
-        pilotes: [{ nom: 'Michel Tonnon', pays: 'BE' }, { nom: 'Elie Tinog', pays: 'FR' }, { nom: 'Otch Massari', pays: 'MA' }] },
-      { equipe: 'Blaze', position: 'DNF', split: '7/9', voiture: 'Aston Martin Valkyrie', categorie: 'GTP', affiche: plmBlaze,
-        pilotes: [{ nom: 'Antoine Barbosa', pays: 'FR' }, { nom: 'Mathéo Manaranche', pays: 'FR' }, { nom: 'Lukas Da Rocha', pays: 'FR' }] },
     ],
   },
 ];

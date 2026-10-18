@@ -7,6 +7,7 @@ import LogoJeu from '../components/LogoJeu.astro';
 import { evenements, evenementsLmu, finDeSemaine, libelleType, plage, moisLong } from '../data/courses';
 import affichePLM from '../assets/affiche-petit-le-mans.webp';
 import afficheIndy from '../assets/affiche-8h-indianapolis.webp';
+import afficheHomestead from '../assets/affiche-homestead.webp';
 import afficheFuji from '../assets/affiche-lmu-fuji.webp';
 import afficheRoadAtlanta from '../assets/affiche-lmu-road-atlanta.webp';
 import afficheLeMans from '../assets/affiche-lmu-le-mans.webp';
@@ -22,6 +23,7 @@ const fondsTableau = [fondMustang, fondLumieres, fondTrio, fondDuo];
 const affiches: Record<string, ImageMetadata> = {
   'Petit Le Mans': affichePLM,
   '8 Hours of Indianapolis': afficheIndy,
+  'Homestead Championship': afficheHomestead,
 };
 
 // Un seul bloc mis en avant par jeu : la dernière course où Ascendia est engagée (la plus récente
