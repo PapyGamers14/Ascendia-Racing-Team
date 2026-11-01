@@ -19,6 +19,9 @@ import sebringComete from '../assets/palmares/sebring-12h-comete.webp';
 import bahrainBarbosa from '../assets/palmares/bahrain-4h-barbosa.webp';
 import barceloneBarbosa from '../assets/palmares/barcelone-2h20-barbosa.webp';
 import plmDark from '../assets/palmares/petit-le-mans-dark.webp';
+import fujiGalaxy from '../assets/palmares/fuji-6h-galaxy.webp';
+import fujiAcademy1 from '../assets/palmares/fuji-6h-academy-1.webp';
+import bullringBaligant from '../assets/palmares/ifrn-bullring-baligant.webp';
 
 // Palmarès : les meilleurs résultats de la team (victoires et podiums), à garder sur la durée
 // (contrairement à la page Résultats qui ne montre que les 3 dernières courses).
@@ -94,6 +97,12 @@ const liste: Trophee[] = [
   // Petit Le Mans (25–27 septembre), archivé depuis la page Résultats
   { course: 'Petit Le Mans', jeu: 'iRacing', equipe: 'Dark', position: 2, split: '20/23', voiture: 'Ferrari 296 GT3', annee: 2026,
     pilotes: [['François Lambrecq', 'FR'], ['Jérôme Zaracki', 'FR'], ['Alain Bertschy', 'CH']], affiche: plmDark },
+  { course: '6 Heures de Fuji', jeu: 'LMU', equipe: 'Galaxy', position: 2, split: '7/11', voiture: 'Hypercar', annee: 2026,
+    pilotes: [['Antoine Barbosa', 'FR'], ['Nicolas Rigobert', 'FR']], affiche: fujiGalaxy },
+  { course: '6 Heures de Fuji', jeu: 'LMU', equipe: 'Academy 1', position: 3, split: '6/11', voiture: 'McLaren 720S GT3 Evo', annee: 2026,
+    pilotes: [['Vivien Pochon', 'FR'], ['Matys Dumange', 'FR'], ['Kevin Souyri', 'FR']], affiche: fujiAcademy1 },
+  { course: 'I-FRN · Bullring', jeu: 'iRacing', position: 3, voiture: 'Ford Mustang NASCAR', annee: 2026,
+    pilotes: [['François Baligant', 'BE']], affiche: bullringBaligant },
 ];
 
 // ---------- Podiums repris automatiquement de la page Résultats ----------

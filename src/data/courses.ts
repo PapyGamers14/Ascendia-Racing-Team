@@ -46,6 +46,7 @@ const tousLesEvenements: Evenement[] = [
   { debut: '2026-10-16', fin: '2026-10-18', nom: '8 Hours of Indianapolis', circuit: 'Indianapolis Motor Speedway', classes: 'GT3', type: 'team', ascendia: true },
   { debut: '2026-10-30', fin: '2026-10-31', nom: 'iRacing FF1600 Festival', circuit: 'Brands Hatch', classes: 'FF1600', type: 'standard' },
   { debut: '2026-11-04', fin: '2026-11-09', nom: 'Homestead Championship', circuit: 'Homestead Miami Speedway', classes: 'NASCAR Cup', type: 'standard', ascendia: true },
+  { debut: '2026-11-07', fin: '2026-11-08', nom: '4H de la VLN', circuit: 'Nürburgring Nordschleife', classes: 'GT3', type: 'team', ascendia: true },
   { debut: '2026-11-13', fin: '2026-11-15', nom: 'SFL Mountain Showdown', circuit: 'Mount Panorama Circuit', classes: 'Super Formula Lights', type: 'standard' },
   { debut: '2026-11-17', fin: '2026-11-21', nom: 'iRacing Runoffs', circuit: 'Road America', classes: '6 classes', type: 'super' },
   { debut: '2026-12-02', fin: '2026-12-07', nom: 'Winter Derby', circuit: 'Five Flags Speedway', classes: 'Super Late Model', type: 'standard' },
@@ -84,7 +85,7 @@ export const evenementsLmu: EvenementLmu[] = [
   { semaine: '2026-10-06', nom: '10 Hours of Road Atlanta', circuit: 'Michelin Raceway Road Atlanta', classes: 'Hypercar, WEC LMP2, LMGT3', ascendia: '2026-10-10' },
   { semaine: '2026-10-13', nom: '4 Hours of Portimão', circuit: 'Algarve International Circuit', classes: 'ELMS LMP2, LMP3, LMGT3' },
   { semaine: '2026-10-20', nom: '24 Hours of Le Mans', circuit: 'Circuit de la Sarthe', classes: 'Hypercar, WEC LMP2, LMGT3', ascendia: '2026-10-24' },
-  { semaine: '2026-11-10', nom: '8 Hours of Bahrain', circuit: 'Bahrain International Circuit', classes: 'Hypercar, LMGT3' },
+  { semaine: '2026-11-09', nom: '8 Hours of Bahrain', circuit: 'Bahrain International Circuit', classes: 'Hypercar, LMGT3', ascendia: '2026-11-14' },
   { semaine: '2026-12-01', nom: '6 Hours of Silverstone', circuit: 'Silverstone', classes: 'Hypercar, LMGT3' },
 ];
 

@@ -7,12 +7,11 @@ import indyBlaze from '../assets/resultats/indy-8h-blaze.webp';
 import indyDark from '../assets/resultats/indy-8h-dark.webp';
 import indyAcademy1 from '../assets/resultats/indy-8h-academy-1.webp';
 import indyAcademy2 from '../assets/resultats/indy-8h-academy-2.webp';
-import bullringBaligant from '../assets/resultats/ifrn-bullring-baligant.webp';
-import bullringBarbosa from '../assets/resultats/ifrn-bullring-barbosa.webp';
-import bullringWuilmus from '../assets/resultats/ifrn-bullring-wuilmus.webp';
-import fujiGalaxy from '../assets/resultats/fuji-6h-galaxy.webp';
-import fujiAcademy1 from '../assets/resultats/fuji-6h-academy-1.webp';
-import fujiEclipse from '../assets/resultats/fuji-6h-eclipse.webp';
+import leMansAcademy1 from '../assets/resultats/le-mans-24h-academy-1-lmu.png';
+import leMansGalaxy from '../assets/resultats/le-mans-24h-galaxy-lmu.png';
+import oxfordBaligant from '../assets/resultats/oxford-baligant.png';
+import oxfordWuilmus from '../assets/resultats/oxford-wuilmus.png';
+import oxfordRumen from '../assets/resultats/oxford-rumen.png';
 
 // Résultats de la team, regroupés par course (de la plus récente à la plus ancienne).
 // Seules les 3 dernières courses sont affichées : quand une nouvelle course arrive,
@@ -46,6 +45,26 @@ export interface Course {
 
 export const courses: Course[] = [
   {
+    nom: '24 Heures du Mans', jeu: 'LMU', serie: 'Le Mans Ultimate', debut: '2026-10-24', fin: '2026-10-25', circuit: 'Circuit de la Sarthe',
+    equipages: [
+      { equipe: 'Academy 1', position: 15, split: '9/34', voiture: 'Lexus RC F GT3', categorie: 'LMGT3', affiche: leMansAcademy1,
+        pilotes: [{ nom: 'Vivien Pochon', pays: 'FR' }, { nom: 'Kévin Souyri', pays: 'FR' }, { nom: 'Mickaël Nakazuma', pays: 'BE' }] },
+      { equipe: 'Galaxy', position: 6, split: '14/34', voiture: 'Hypercar', categorie: 'Hypercar', affiche: leMansGalaxy,
+        pilotes: [{ nom: 'Antoine Barbosa', pays: 'FR' }, { nom: 'Nicolas Rigobert', pays: 'FR' }, { nom: 'Jules Castro', pays: 'FR' }, { nom: 'Yohan Van den Bosch', pays: 'BE' }] },
+    ],
+  },
+  {
+    nom: 'I-FRN · Oxford Speedway', serie: 'Rookie Series · Fall 2026', debut: '2026-10-22', fin: '2026-10-22', circuit: 'Oxford Speedway',
+    equipages: [
+      { position: 15, voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: oxfordWuilmus, note: 'Course principale',
+        pilotes: [{ nom: 'Damien Wuilmus', pays: 'BE' }] },
+      { position: 16, voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: oxfordRumen, note: 'Course principale',
+        pilotes: [{ nom: 'Nicolas Rumen', pays: 'FR' }] },
+      { position: 17, voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: oxfordBaligant, note: 'Course principale',
+        pilotes: [{ nom: 'François Baligant', pays: 'BE' }] },
+    ],
+  },
+  {
     nom: "8 Heures d'Indianapolis", serie: 'iRacing Special Event', debut: '2026-10-16', fin: '2026-10-18', circuit: 'Indianapolis Motor Speedway',
     equipages: [
       { equipe: 'Dark', position: 5, split: '5/6', voiture: 'Ferrari 296 GT3', categorie: 'GT3', affiche: indyDark,
@@ -60,28 +79,6 @@ export const courses: Course[] = [
         pilotes: [{ nom: 'Christophe Vannobel', pays: 'FR' }, { nom: 'Eddy Velez', pays: 'FR' }] },
       { equipe: 'Comète', position: 'DNF', voiture: 'Porsche 911 GT3 R (992)', categorie: 'GT3', affiche: indyComete,
         pilotes: [{ nom: 'Damien Wuilmus', pays: 'BE' }, { nom: 'Thomas Doyen', pays: 'BE' }] },
-    ],
-  },
-  {
-    nom: 'I-FRN · Bullring', serie: 'Rookie Series · Fall 2026', debut: '2026-10-08', fin: '2026-10-08', circuit: 'Las Vegas Bullring',
-    equipages: [
-      { position: 3, voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: bullringBaligant, note: 'Course principale',
-        pilotes: [{ nom: 'François Baligant', pays: 'BE' }] },
-      { position: 5, voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: bullringBarbosa, note: 'Course principale',
-        pilotes: [{ nom: 'Antoine Barbosa', pays: 'FR' }] },
-      { position: 6, voiture: 'Ford Mustang NASCAR', categorie: 'NASCAR', affiche: bullringWuilmus, note: 'Course de consolation',
-        pilotes: [{ nom: 'Damien Wuilmus', pays: 'BE' }] },
-    ],
-  },
-  {
-    nom: '6 Heures de Fuji', jeu: 'LMU', serie: 'Le Mans Ultimate', debut: '2026-10-03', fin: '2026-10-03', circuit: 'Fuji Speedway',
-    equipages: [
-      { equipe: 'Galaxy', position: 2, split: '7/11', voiture: 'Hypercar', categorie: 'Hypercar', affiche: fujiGalaxy,
-        pilotes: [{ nom: 'Antoine Barbosa', pays: 'FR' }, { nom: 'Nicolas Rigobert', pays: 'FR' }] },
-      { equipe: 'Academy 1', position: 3, split: '6/11', voiture: 'McLaren 720S GT3 Evo', categorie: 'LMGT3', affiche: fujiAcademy1,
-        pilotes: [{ nom: 'Vivien Pochon', pays: 'FR' }, { nom: 'Matys Dumange', pays: 'FR' }, { nom: 'Kevin Souyri', pays: 'FR' }] },
-      { equipe: 'Eclipse', position: 7, split: '6/11', voiture: 'Hypercar', categorie: 'Hypercar', affiche: fujiEclipse,
-        pilotes: [{ nom: 'Mickael Nakazuma', pays: 'BE' }, { nom: 'Yohan Van den Bosch', pays: 'BE' }] },
     ],
   },
 ];

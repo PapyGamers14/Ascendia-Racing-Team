@@ -10,8 +10,8 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 
 ## Mise en ligne
 
-Le site est hébergé sur Vercel (projet `ascendia-racing`, adresse https://ascendia-racing.vercel.app).
-Pour publier les dernières modifications : `vercel deploy --prod --yes` depuis ce dossier.
+Le site est hébergé sur Vercel dans l'équipe `dev-normandie` (projet `ascendia-racing`, adresse https://ascendia-racing-xi.vercel.app).
+Pour publier les dernières modifications : `vercel deploy --scope dev-normandie --prod --yes` depuis ce dossier.
 
 ## Mise à jour du calendrier
 
