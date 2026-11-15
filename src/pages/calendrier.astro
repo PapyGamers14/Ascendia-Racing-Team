@@ -13,6 +13,8 @@ import afficheRoadAtlanta from '../assets/affiche-lmu-road-atlanta.webp';
 import afficheLeMans from '../assets/affiche-lmu-le-mans.webp';
 import afficheVln from '../assets/affiche-4h-vln.png';
 import afficheBahrain from '../assets/affiche-lmu-bahrain.png';
+import afficheMonza from '../assets/affiche-lmu-monza.png';
+import affiche992 from '../assets/affiche-iracing-992-endurance-cup.png';
 import fondMustang from '../assets/mustang-gt3-fond.webp';
 import fondLumieres from '../assets/fond-lumieres.webp';
 import fondTrio from '../assets/trio-gt3-963-nascar.webp';
@@ -27,6 +29,7 @@ const affiches: Record<string, ImageMetadata> = {
   '8 Hours of Indianapolis': afficheIndy,
   'Homestead Championship': afficheHomestead,
   '4H de la VLN': afficheVln,
+  '992 Endurance Cup': affiche992,
 };
 
 // Un seul bloc mis en avant par jeu : la dernière course où Ascendia est engagée (la plus récente
@@ -51,10 +54,9 @@ const affichesLmu: Record<string, ImageMetadata> = {
   '10 Hours of Road Atlanta': afficheRoadAtlanta,
   '24 Hours of Le Mans': afficheLeMans,
   '8 Hours of Bahrain': afficheBahrain,
+  '6 Hours of Monza': afficheMonza,
 };
 const lmuEngagees = derniere(lmu.filter((e) => e.ascendia));
-const dateLongue = (iso: string) =>
-  new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 const semaineDu = (iso: string) =>
   new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }).replace('.', '');
 const twitch = 'https://www.twitch.tv/ascendiatv';
@@ -172,18 +174,18 @@ const twitch = 'https://www.twitch.tv/ascendiatv';
     ))}
     <p class="mono vide" hidden>Aucun événement à venir pour ce filtre.</p>
     </div>
-    <p class="mono source">Source : iracing.com/special-events</p>
+    <p class="mono source">Sources : calendrier iRacing et affiches Ascendia Racing.</p>
    </div>
   </section>
 
   <!-- ================= MANCHE LMU D'ASCENDIA (rouge Ferrari) ================= -->
   {lmuEngagees.map((e) => (
-    <section class="wrap feature feature-lmu" data-debut={e.ascendia} data-fin={e.ascendia} aria-labelledby={`t-lmu-${e.semaine}`}>
+    <section class="wrap feature feature-lmu" data-debut={e.ascendia} data-fin={e.finAscendia ?? e.ascendia} aria-labelledby={`t-lmu-${e.semaine}`}>
       {affichesLmu[e.nom] && (
         <div class="poster reveal">
           <Image
             src={affichesLmu[e.nom]}
-            alt={`Affiche Ascendia Racing — ${e.nom}, ${dateLongue(e.ascendia!)}, Le Mans Ultimate`}
+            alt={`Affiche Ascendia Racing — ${e.nom}, ${plage(e.ascendia!, e.finAscendia ?? e.ascendia!)} 2026, Le Mans Ultimate`}
             widths={[480, 800, 1080]}
             sizes="(max-width: 860px) 100vw, 480px"
           />
@@ -192,7 +194,7 @@ const twitch = 'https://www.twitch.tv/ascendiatv';
       <div class="feature-body reveal" style="--d:.1s">
         <p class="statut mono" data-statut><i></i><span>Ascendia engagée</span></p>
         <h2 id={`t-lmu-${e.semaine}`}>{e.nom}</h2>
-        <p class="feature-date">{dateLongue(e.ascendia!)}</p>
+        <p class="feature-date">{plage(e.ascendia!, e.finAscendia ?? e.ascendia!)} 2026</p>
         <dl class="spec">
           <div><dt>Circuit</dt><dd>{e.circuit}</dd></div>
           <div><dt>Catégories</dt><dd>{e.classes}</dd></div>
@@ -235,7 +237,7 @@ const twitch = 'https://www.twitch.tv/ascendiatv';
         </li>
       ))}
     </ol>
-    <p class="mono source">Source : calendrier officiel Le Mans Ultimate 2026</p>
+    <p class="mono source">Sources : calendrier Le Mans Ultimate et affiches Ascendia Racing.</p>
   </section>
 </Base>
 

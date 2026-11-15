@@ -49,6 +49,7 @@ const tousLesEvenements: Evenement[] = [
   { debut: '2026-11-07', fin: '2026-11-08', nom: '4H de la VLN', circuit: 'Nürburgring Nordschleife', classes: 'GT3', type: 'team', ascendia: true },
   { debut: '2026-11-13', fin: '2026-11-15', nom: 'SFL Mountain Showdown', circuit: 'Mount Panorama Circuit', classes: 'Super Formula Lights', type: 'standard' },
   { debut: '2026-11-17', fin: '2026-11-21', nom: 'iRacing Runoffs', circuit: 'Road America', classes: '6 classes', type: 'super' },
+  { debut: '2026-11-27', fin: '2026-11-29', nom: '992 Endurance Cup', circuit: 'À confirmer', classes: 'Porsche 992 Cup', type: 'team', ascendia: true },
   { debut: '2026-12-02', fin: '2026-12-07', nom: 'Winter Derby', circuit: 'Five Flags Speedway', classes: 'Super Late Model', type: 'standard' },
   { debut: '2026-12-15', fin: '2026-12-20', nom: 'Chili Bowl', circuit: 'Chili Bowl', classes: 'Dirt Midget', type: 'super' },
   { debut: '2026-12-18', fin: '2026-12-19', nom: 'THE Production Car Challenge', circuit: 'Virginia International Raceway', classes: 'PCC Class', type: 'standard' },
@@ -64,7 +65,7 @@ function categoriesSuivies(classes: string) {
 
 /** Les événements affichés sur le site : uniquement ceux des catégories suivies */
 export const evenements: Evenement[] = tousLesEvenements
-  .map((e) => ({ ...e, classes: categoriesSuivies(e.classes).join(', ') }))
+  .map((e) => ({ ...e, classes: e.ascendia ? e.classes : categoriesSuivies(e.classes).join(', ') }))
   .filter((e) => e.classes !== '');
 
 // ================= CALENDRIER LMU (Le Mans Ultimate) =================
@@ -78,6 +79,7 @@ export interface EvenementLmu {
   circuit: string;
   classes: string;
   ascendia?: string; // date de la course d'Ascendia (AAAA-MM-JJ) si la team est engagée → bloc mis en avant
+  finAscendia?: string; // dernier jour si la course d'Ascendia dure plusieurs jours
 }
 
 export const evenementsLmu: EvenementLmu[] = [
@@ -86,6 +88,7 @@ export const evenementsLmu: EvenementLmu[] = [
   { semaine: '2026-10-13', nom: '4 Hours of Portimão', circuit: 'Algarve International Circuit', classes: 'ELMS LMP2, LMP3, LMGT3' },
   { semaine: '2026-10-20', nom: '24 Hours of Le Mans', circuit: 'Circuit de la Sarthe', classes: 'Hypercar, WEC LMP2, LMGT3', ascendia: '2026-10-24' },
   { semaine: '2026-11-09', nom: '8 Hours of Bahrain', circuit: 'Bahrain International Circuit', classes: 'Hypercar, LMGT3', ascendia: '2026-11-14' },
+  { semaine: '2026-11-16', nom: '6 Hours of Monza', circuit: 'Autodromo Nazionale Monza', classes: 'Hypercar, LMGT3', ascendia: '2026-11-21', finAscendia: '2026-11-22' },
   { semaine: '2026-12-01', nom: '6 Hours of Silverstone', circuit: 'Silverstone', classes: 'Hypercar, LMGT3' },
 ];
 

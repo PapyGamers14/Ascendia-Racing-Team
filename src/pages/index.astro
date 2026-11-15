@@ -28,7 +28,7 @@ const jeux = [
     courses: evenementsLmu.map((e) => ({
       nom: e.nom, circuit: e.circuit, classes: e.classes,
       debut: e.ascendia ?? e.semaine,
-      fin: e.ascendia ?? finDeSemaine(e.semaine),
+      fin: e.finAscendia ?? e.ascendia ?? finDeSemaine(e.semaine),
       ascendia: !!e.ascendia, badge: 'Manche LMU',
     })),
   },

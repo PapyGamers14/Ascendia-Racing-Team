@@ -12,10 +12,16 @@ import leMansGalaxy from '../assets/resultats/le-mans-24h-galaxy-lmu.png';
 import oxfordBaligant from '../assets/resultats/oxford-baligant.png';
 import oxfordWuilmus from '../assets/resultats/oxford-wuilmus.png';
 import oxfordRumen from '../assets/resultats/oxford-rumen.png';
+import vlnBaligant from '../assets/resultats/vln-baligant.png';
+import vlnWuilmus from '../assets/resultats/vln-wuilmus.png';
+import vlnBertschy from '../assets/resultats/vln-bertschy.png';
+import vlnLambrecq from '../assets/resultats/vln-lambrecq.png';
+import bahrainEclipse from '../assets/resultats/bahrain-eclipse.png';
+import bahrainAcademy3 from '../assets/resultats/bahrain-academy-3.png';
 
 // Résultats de la team, regroupés par course (de la plus récente à la plus ancienne).
-// Seules les 3 dernières courses sont affichées : quand une nouvelle course arrive,
-// supprimer la plus ancienne ici ET son/ses affiche(s) dans src/assets/resultats/.
+// La page Résultats affiche les 3 dernières courses ; les entrées plus anciennes restent
+// ici pour conserver l'historique et alimenter les podiums du Palmarès.
 // Pour ajouter un résultat : dépose l'affiche dans src/assets/resultats/,
 // importe-la ci-dessus puis ajoute un équipage dans la bonne course (ou une nouvelle course).
 
@@ -44,6 +50,28 @@ export interface Course {
 }
 
 export const courses: Course[] = [
+  {
+    nom: '8 Heures de Bahreïn', jeu: 'LMU', serie: 'Le Mans Ultimate', debut: '2026-11-14', fin: '2026-11-14', circuit: 'Bahrain International Circuit',
+    equipages: [
+      { equipe: 'Academy 3', position: 1, split: '3/9', voiture: 'Hypercar', categorie: 'Hypercar', affiche: bahrainAcademy3,
+        pilotes: [{ nom: 'Antoine Barbosa', pays: 'FR' }] },
+      { equipe: 'Eclipse', position: 14, split: '4/9', voiture: 'Mercedes-AMG GT3', categorie: 'LMGT3', affiche: bahrainEclipse,
+        pilotes: [{ nom: 'Eric Legrand', pays: 'FR' }, { nom: 'Mickael Nakazuma', pays: 'BE' }] },
+    ],
+  },
+  {
+    nom: '4 Heures de la VLN', debut: '2026-11-07', fin: '2026-11-08', circuit: 'Nürburgring Nordschleife',
+    equipages: [
+      { position: 2, split: '11/15', voiture: 'Mercedes-AMG GT3', categorie: 'GT3', affiche: vlnWuilmus,
+        pilotes: [{ nom: 'Damien Wuilmus', pays: 'BE' }] },
+      { position: 6, split: '9/15', voiture: 'Aston Martin Vantage GT3', categorie: 'GT3', affiche: vlnLambrecq,
+        pilotes: [{ nom: 'François Lambrecq', pays: 'FR' }] },
+      { position: 'DNF', split: '6/15', voiture: 'Mercedes-AMG GT3', categorie: 'GT3', affiche: vlnBaligant,
+        pilotes: [{ nom: 'François Baligant', pays: 'BE' }] },
+      { position: 'DNF', split: '12/20', voiture: 'Aston Martin Vantage GT3', categorie: 'GT3', affiche: vlnBertschy,
+        pilotes: [{ nom: 'Alain Bertschy', pays: 'CH' }] },
+    ],
+  },
   {
     nom: '24 Heures du Mans', jeu: 'LMU', serie: 'Le Mans Ultimate', debut: '2026-10-24', fin: '2026-10-25', circuit: 'Circuit de la Sarthe',
     equipages: [

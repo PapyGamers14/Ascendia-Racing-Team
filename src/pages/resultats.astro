@@ -22,7 +22,7 @@ const posTexte = (p: Equipage['position']) => (p === 'DNF' ? 'DNF' : `P${p}`);
 // titre de la carte : l'équipage, ou le pilote pour une course en solo
 const titre = (e: Equipage) => (e.equipe ? `Équipage ${e.equipe}` : (e.pilotes ?? []).map((p) => p.nom).join(' · '));
 ---
-<Base title="Résultats" description="Derniers résultats de l'Ascendia Racing Team sur iRacing : I-FRN Rookie Series, Suzuka 1000km, 24 Heures du Mans. Victoires et podiums des équipages Blaze, Astra, Comète et Academy.">
+<Base title="Résultats" description="Derniers résultats de l'Ascendia Racing Team sur iRacing et Le Mans Ultimate : 8 Heures de Bahreïn, 4 Heures de la VLN et 24 Heures du Mans.">
   <PageHero
     index="03"
     kicker="Saison 2026"
