@@ -7,7 +7,7 @@ import { membres, photoDe, aPortrait } from '../data/team';
 import { streamers, chaineOfficielle } from '../data/streamers';
 
 // Domaines autorisés à afficher le lecteur Twitch (exigence de Twitch)
-const parents = ['ascendia-racing.vercel.app', 'localhost'];
+const parents = ['ascendiaracingteam.com', 'www.ascendiaracingteam.com', 'ascendia-racing-xi.vercel.app', 'localhost'];
 const lecteurDe = (chaine: string) =>
   `https://player.twitch.tv/?channel=${chaine}&${parents.map((p) => `parent=${p}`).join('&')}&muted=true&autoplay=false`;
 const chaines = chaineOfficielle.twitch;
