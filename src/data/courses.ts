@@ -89,7 +89,7 @@ export const evenementsLmu: EvenementLmu[] = [
   { semaine: '2026-10-20', nom: '24 Hours of Le Mans', circuit: 'Circuit de la Sarthe', classes: 'Hypercar, WEC LMP2, LMGT3', ascendia: '2026-10-24' },
   { semaine: '2026-11-09', nom: '8 Hours of Bahrain', circuit: 'Bahrain International Circuit', classes: 'Hypercar, LMGT3', ascendia: '2026-11-14' },
   { semaine: '2026-11-16', nom: '6 Hours of Monza', circuit: 'Autodromo Nazionale Monza', classes: 'Hypercar, LMGT3', ascendia: '2026-11-21', finAscendia: '2026-11-22' },
-  { semaine: '2026-12-01', nom: '6 Hours of Silverstone', circuit: 'Silverstone', classes: 'Hypercar, LMGT3' },
+  { semaine: '2026-12-01', nom: '6 Hours of Silverstone', circuit: 'Silverstone', classes: 'Hypercar, LMGT3', ascendia: '2026-12-05' },
 ];
 
 /** dernier jour de la semaine de course (lundi + 6 jours) */
